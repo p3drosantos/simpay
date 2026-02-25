@@ -1,0 +1,18 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:17
+    container_name: fsc-events-postgres
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: simpay
+    volumes:
+      - simpay-postgres-data:/var/lib/postgresql/data
+
+volumes:
+  simpay-postgres-data:
