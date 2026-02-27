@@ -22,3 +22,8 @@ export enum HttpStatusCode {
   SERVER_ERROR = 500,
   NOT_FOUND = 404,
 }
+
+export type ValidationError = {
+  field: string
+  message: string
+}

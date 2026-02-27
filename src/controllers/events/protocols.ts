@@ -1,6 +1,6 @@
 import { Event } from "../../models/event.js"
 import { CreateEventInput } from "../../validators/create-event.schema.js"
-import { HttpRequest, HttpResponse } from "../protocols.js"
+import { HttpRequest, HttpResponse, ValidationError } from "../protocols.js"
 
 export interface ICreateEventsRepository {
   createEvent: (params: CreateEventInput) => Promise<Event>
@@ -13,5 +13,5 @@ export interface ICreateEventUseCase {
 export interface ICreateEventController {
   createEvent: (
     request: HttpRequest<CreateEventInput>
-  ) => Promise<HttpResponse<Event | { error: string }>>
+  ) => Promise<HttpResponse<Event | { error: ValidationError[] | string }>>
 }
