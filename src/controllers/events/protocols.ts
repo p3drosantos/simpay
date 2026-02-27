@@ -1,26 +1,17 @@
 import { Event } from "../../models/event.js"
+import { CreateEventInput } from "../../validators/create-event.schema.js"
 import { HttpRequest, HttpResponse } from "../protocols.js"
 
-export interface createEventsParams {
-  id: string
-  ownerId: string
-  name: string
-  ticketPriceInCents: number
-  longitude: number
-  latitude: number
-  date: Date
-}
-
 export interface ICreateEventsRepository {
-  createEvent: (params: createEventsParams) => Promise<Event>
+  createEvent: (params: CreateEventInput) => Promise<Event>
 }
 
 export interface ICreateEventUseCase {
-  createEvent: (params: createEventsParams) => Promise<Event>
+  createEvent: (params: CreateEventInput) => Promise<Event>
 }
 
 export interface ICreateEventController {
   createEvent: (
-    request: HttpRequest<createEventsParams>
+    request: HttpRequest<CreateEventInput>
   ) => Promise<HttpResponse<Event | { error: string }>>
 }

@@ -1,16 +1,13 @@
 import { HttpRequest, HttpResponse } from "../protocols.js"
-import {
-  createEventsParams,
-  ICreateEventController,
-  ICreateEventUseCase,
-} from "./protocols.js"
+import { ICreateEventController, ICreateEventUseCase } from "./protocols.js"
 import { Event } from "../../models/event.js"
+import { CreateEventInput } from "../../validators/create-event.schema.js"
 
 export class CreateEventController implements ICreateEventController {
   constructor(private createEventUseCase: ICreateEventUseCase) {}
 
   async createEvent(
-    request: HttpRequest<createEventsParams>
+    request: HttpRequest<CreateEventInput>
   ): Promise<HttpResponse<Event | { error: string }>> {
     try {
       if (!request.body) {
