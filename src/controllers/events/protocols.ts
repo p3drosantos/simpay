@@ -15,3 +15,17 @@ export interface ICreateEventController {
     request: HttpRequest<CreateEventInput>
   ) => Promise<HttpResponse<Event | { error: ValidationError[] | string }>>
 }
+
+export interface IGetEventByIdRepository {
+  getEventById: (id: string) => Promise<Event | null>
+}
+
+export interface IGetEventByIdUseCase {
+  getEventById: (id: string) => Promise<Event | null>
+}
+
+export interface IGetEventByIdController {
+  getEventById: (
+    request: HttpRequest<unknown, { id: string }>
+  ) => Promise<HttpResponse<Event | { error: string }>>
+}
