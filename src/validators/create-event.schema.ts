@@ -16,4 +16,10 @@ export const createEventSchema = z.object({
   }),
 })
 
+export const getEventByIdSchema = z.object({
+  id: z.uuid("Invalid event ID"),
+})
+
+export type GetEventByIdInput = z.infer<typeof getEventByIdSchema>
+
 export type CreateEventInput = z.infer<typeof createEventSchema>
