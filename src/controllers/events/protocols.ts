@@ -29,3 +29,17 @@ export interface IGetEventByIdController {
     request: HttpRequest<unknown, { id: string }>
   ) => Promise<HttpResponse<Event | { error: string }>>
 }
+
+export interface IGetAllEventsRepository {
+  getAllEvents: () => Promise<Event[]>
+}
+
+export interface IGetAllEventsUseCase {
+  getAllEvents: () => Promise<Event[]>
+}
+
+export interface IGetAllEventsController {
+  getAllEvents: (
+    request: HttpRequest
+  ) => Promise<HttpResponse<Event[] | { error: string }>>
+}
