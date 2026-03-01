@@ -1,5 +1,8 @@
 import { Event } from "../../models/event.js"
-import { CreateEventInput } from "../../validators/create-event.schema.js"
+import {
+  CreateEventInput,
+  UpdateEventInput,
+} from "../../validators/create-event.schema.js"
 import { HttpRequest, HttpResponse, ValidationError } from "../protocols.js"
 
 export interface ICreateEventsRepository {
@@ -42,4 +45,24 @@ export interface IGetAllEventsController {
   getAllEvents: (
     request: HttpRequest
   ) => Promise<HttpResponse<Event[] | { error: string }>>
+}
+
+export interface IUpdateEventRepository {
+  updateEvent: (
+    id: string,
+    data: Partial<UpdateEventInput>
+  ) => Promise<Event | null>
+}
+
+export interface IUpdateEventUseCase {
+  updateEvent: (
+    id: string,
+    data: Partial<UpdateEventInput>
+  ) => Promise<Event | null>
+}
+
+export interface IUpdateEventController {
+  updateEvent: (
+    request: HttpRequest<Partial<UpdateEventInput>, { id: string }>
+  ) => Promise<HttpResponse<Event | { error: ValidationError[] | string }>>
 }
