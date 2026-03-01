@@ -20,6 +20,26 @@ export const getEventByIdSchema = z.object({
   id: z.uuid("Invalid event ID"),
 })
 
+export const updateEventSchema = z.object({
+  name: z
+    .string()
+    .min(3, "Event name must have at least 3 characters")
+    .optional(),
+  ticketPriceInCents: z.number().positive("Price must be positive").optional(),
+  date: z
+    .preprocess(
+      (arg) => {
+        if (!arg) return undefined
+        if (typeof arg === "string" || arg instanceof Date) return new Date(arg)
+        return arg
+      },
+      z.date().refine((d) => d > new Date(), "Date must be in the future")
+    )
+    .optional(),
+})
+
+export type UpdateEventInput = z.infer<typeof updateEventSchema>
+
 export type GetEventByIdInput = z.infer<typeof getEventByIdSchema>
 
 export type CreateEventInput = z.infer<typeof createEventSchema>
