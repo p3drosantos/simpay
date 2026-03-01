@@ -9,6 +9,9 @@ import { GetEventByIdController } from "./controllers/events/get-event-by-id.js"
 import { GetAllEventsRepository } from "./repositories/get-all-events.js"
 import { GetAllEventsController } from "./controllers/events/get-all-events.js"
 import { GetAllEventsUseCase } from "./use-cases/get-all-events.js"
+import { UpdateEventRepository } from "./repositories/update-event.js"
+import { UpdateEventUseCase } from "./use-cases/update-event.js"
+import { UpdateEventController } from "./controllers/events/update-event.js"
 dotenv.config()
 
 const app = express()
@@ -66,6 +69,25 @@ app.get("/events", async (req, res) => {
     return res.status(response.statusCode).json(response.body)
   } catch (error) {
     console.error("ERRO NA ROTA /events:")
+    console.error(error)
+
+    return res.status(500).json({ error: String(error) })
+  }
+})
+
+app.put("/events/:id", async (req, res) => {
+  try {
+    const updateEventRepository = new UpdateEventRepository()
+    const updateEventUseCase = new UpdateEventUseCase(updateEventRepository)
+    const updateEventController = new UpdateEventController(updateEventUseCase)
+
+    const response = await updateEventController.updateEvent({
+      params: req.params,
+      body: req.body,
+    })
+    return res.status(response.statusCode).json(response.body)
+  } catch (error) {
+    console.error("ERRO NA ROTA PUT /events/:id:")
     console.error(error)
 
     return res.status(500).json({ error: String(error) })
