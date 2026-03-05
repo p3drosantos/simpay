@@ -66,3 +66,17 @@ export interface IUpdateEventController {
     request: HttpRequest<Partial<UpdateEventInput>, { id: string }>
   ) => Promise<HttpResponse<Event | { error: ValidationError[] | string }>>
 }
+
+export interface IDeleteEventRepository {
+  deleteEvent: (id: string) => Promise<Event | null>
+}
+
+export interface IDeleteEventUseCase {
+  deleteEvent: (id: string) => Promise<Event | null>
+}
+
+export interface IDeleteEventController {
+  deleteEvent: (
+    request: HttpRequest<unknown, { id: string }>
+  ) => Promise<HttpResponse<Event | { error: ValidationError[] | string }>>
+}
