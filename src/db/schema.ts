@@ -16,3 +16,11 @@ export const eventsTable = pgTable("events", {
   latitude: decimal({ precision: 10, scale: 6 }).notNull(),
   date: timestamp({ withTimezone: true }).notNull(),
 })
+
+export const userTable = pgTable("users", {
+  id: uuid().primaryKey().defaultRandom(),
+  name: text().notNull(),
+  email: text().notNull().unique(),
+  password: text().notNull(),
+  createdAt: timestamp({ withTimezone: true }).notNull().defaultNow(),
+})
