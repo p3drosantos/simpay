@@ -12,6 +12,9 @@ import { GetAllEventsUseCase } from "./use-cases/get-all-events.js"
 import { UpdateEventRepository } from "./repositories/update-event.js"
 import { UpdateEventUseCase } from "./use-cases/update-event.js"
 import { UpdateEventController } from "./controllers/events/update-event.js"
+import { DeleteEventController } from "./controllers/events/delete-event.js"
+import { DeleteEventRepository } from "./repositories/delete-event.js"
+import { DeleteEventUseCase } from "./use-cases/delete-event.js"
 dotenv.config()
 
 const app = express()
@@ -88,6 +91,24 @@ app.put("/events/:id", async (req, res) => {
     return res.status(response.statusCode).json(response.body)
   } catch (error) {
     console.error("ERRO NA ROTA PUT /events/:id:")
+    console.error(error)
+
+    return res.status(500).json({ error: String(error) })
+  }
+})
+
+app.delete("/events/:id", async (req, res) => {
+  try {
+    const deleteEventRepository = new DeleteEventRepository()
+    const deleteEventUseCase = new DeleteEventUseCase(deleteEventRepository)
+    const deleteEventController = new DeleteEventController(deleteEventUseCase)
+
+    const response = await deleteEventController.deleteEvent({
+      params: req.params,
+    })
+    return res.status(response.statusCode).json(response.body)
+  } catch (error) {
+    console.error("ERRO NA ROTA DELETE /events/:id:")
     console.error(error)
 
     return res.status(500).json({ error: String(error) })
