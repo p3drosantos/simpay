@@ -1,7 +1,7 @@
 import {
   IGetAllEventsRepository,
   IGetAllEventsUseCase,
-} from "../controllers/events/protocols.js"
+} from "../../controllers/events/protocols.js"
 
 export class GetAllEventsUseCase implements IGetAllEventsUseCase {
   constructor(private getAllEventsRepository: IGetAllEventsRepository) {}

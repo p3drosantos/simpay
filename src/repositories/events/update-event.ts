@@ -1,10 +1,10 @@
 import { drizzle } from "drizzle-orm/node-postgres"
 import "dotenv/config"
 
-import { IUpdateEventRepository } from "../controllers/events/protocols.js"
-import { UpdateEventInput } from "../validators/create-event.schema.js"
-import { Event } from "../models/event.js"
-import * as schema from "../db/schema.js"
+import { IUpdateEventRepository } from "../../controllers/events/protocols.js"
+import { UpdateEventInput } from "../../validators/create-event.schema.js"
+import { Event } from "../../models/event.js"
+import * as schema from "../../db/schema.js"
 import { eq } from "drizzle-orm"
 
 if (!process.env.DATABASE_URL) {

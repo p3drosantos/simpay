@@ -1,10 +1,10 @@
 import { drizzle } from "drizzle-orm/node-postgres"
 import "dotenv/config"
 
-import * as schema from "../db/schema.js"
-import { ICreateEventsRepository } from "../controllers/events/protocols.js"
-import { Event } from "../models/event.js"
-import { CreateEventInput } from "../validators/create-event.schema.js"
+import * as schema from "../../db/schema.js"
+import { ICreateEventsRepository } from "../../controllers/events/protocols.js"
+import { Event } from "../../models/event.js"
+import { CreateEventInput } from "../../validators/create-event.schema.js"
 
 if (!process.env.DATABASE_URL) {
   throw new Error("Missing DATABASE_URL")

@@ -1,8 +1,8 @@
 import { drizzle } from "drizzle-orm/node-postgres"
 import "dotenv/config"
-import { IGetAllEventsRepository } from "../controllers/events/protocols.js"
-import * as schema from "../db/schema.js"
-import { Event } from "../models/event.js"
+import { IGetEventByIdRepository } from "../../controllers/events/protocols.js"
+import * as schema from "../../db/schema.js"
+import { eq } from "drizzle-orm"
 
 if (!process.env.DATABASE_URL) {
   throw new Error("Missing DATABASE_URL")
@@ -10,14 +10,19 @@ if (!process.env.DATABASE_URL) {
 
 const db = drizzle(process.env.DATABASE_URL, { schema })
 
-export class GetAllEventsRepository implements IGetAllEventsRepository {
-  async getAllEvents(): Promise<Event[]> {
+export class GetEventByIdRepository implements IGetEventByIdRepository {
+  async getEventById(id: string) {
     const table = schema.eventsTable
-    const events = await db.select().from(table)
 
-    if (!events) return []
+    const [event] = await db
+      .select()
+      .from(table)
+      .where(eq(table.id, id))
+      .limit(1)
 
-    return events.map((event) => ({
+    if (!event) return null
+
+    return {
       id: event.id,
       ownerId: event.ownerId,
       name: event.name,
@@ -25,6 +30,6 @@ export class GetAllEventsRepository implements IGetAllEventsRepository {
       longitude: Number(event.longitude),
       latitude: Number(event.latitude),
       date: new Date(event.date),
-    }))
+    }
   }
 }

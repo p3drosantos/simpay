@@ -1,7 +1,9 @@
 import { drizzle } from "drizzle-orm/node-postgres"
 import "dotenv/config"
-import { IGetEventByIdRepository } from "../controllers/events/protocols.js"
-import * as schema from "../db/schema.js"
+
+import { IDeleteEventRepository } from "../../controllers/events/protocols.js"
+import { Event } from "../../models/event.js"
+import * as schema from "../../db/schema.js"
 import { eq } from "drizzle-orm"
 
 if (!process.env.DATABASE_URL) {
@@ -10,17 +12,15 @@ if (!process.env.DATABASE_URL) {
 
 const db = drizzle(process.env.DATABASE_URL, { schema })
 
-export class GetEventByIdRepository implements IGetEventByIdRepository {
-  async getEventById(id: string) {
+export class DeleteEventRepository implements IDeleteEventRepository {
+  async deleteEvent(id: string): Promise<Event | null> {
     const table = schema.eventsTable
 
-    const [event] = await db
-      .select()
-      .from(table)
-      .where(eq(table.id, id))
-      .limit(1)
+    const [event] = await db.delete(table).where(eq(table.id, id)).returning()
 
-    if (!event) return null
+    if (!event) {
+      return null
+    }
 
     return {
       id: event.id,

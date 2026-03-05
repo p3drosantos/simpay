@@ -1,7 +1,7 @@
 import {
   IGetEventByIdRepository,
   IGetEventByIdUseCase,
-} from "../controllers/events/protocols.js"
+} from "../../controllers/events/protocols.js"
 
 export class GetEventByIdUseCase implements IGetEventByIdUseCase {
   constructor(private getEventByIdRepository: IGetEventByIdRepository) {}
