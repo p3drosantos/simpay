@@ -6,6 +6,7 @@ import {
 } from "../../validators/create-user.schema.js"
 import { HttpRequest, HttpResponse, ValidationError } from "../protocols.js"
 import { ICreateUserController, ICreateUserUseCase } from "./protocols.js"
+import { UserAlreadyExistsError } from "../../errors/UserAlreadyExistsError.js"
 
 export class CreateUserController implements ICreateUserController {
   constructor(private createUserUseCase: ICreateUserUseCase) {}
@@ -52,6 +53,12 @@ export class CreateUserController implements ICreateUserController {
                   : issue.message,
             })),
           },
+        }
+      }
+      if (error instanceof UserAlreadyExistsError) {
+        return {
+          statusCode: 409,
+          body: { error: error.message },
         }
       }
     }

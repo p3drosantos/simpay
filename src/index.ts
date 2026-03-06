@@ -18,6 +18,7 @@ import { DeleteEventUseCase } from "./use-cases/events/delete-event.js"
 import { CreateUserController } from "./controllers/users/create-user.js"
 import { CreateUserRepository } from "./repositories/users/create-user.js"
 import { CreateUserUseCase } from "./use-cases/users/create-user.js"
+import { GetUserByEmailRepository } from "./repositories/users/get-user-by-email.js"
 dotenv.config()
 
 const app = express()
@@ -120,8 +121,12 @@ app.delete("/events/:id", async (req, res) => {
 
 app.post("/users", async (req, res) => {
   try {
+    const getUserByEmailRepository = new GetUserByEmailRepository()
     const createUserRepository = new CreateUserRepository()
-    const createUserUseCase = new CreateUserUseCase(createUserRepository)
+    const createUserUseCase = new CreateUserUseCase(
+      createUserRepository,
+      getUserByEmailRepository
+    )
     const createUserController = new CreateUserController(createUserUseCase)
 
     const response = await createUserController.createUser({

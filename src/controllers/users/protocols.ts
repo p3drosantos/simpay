@@ -17,3 +17,7 @@ export interface ICreateUserController {
     HttpResponse<Omit<User, "password"> | { error: ValidationError[] | string }>
   >
 }
+
+export interface IGetUserByEmailRepository {
+  getUserByEmail: (email: string) => Promise<User | null>
+}
