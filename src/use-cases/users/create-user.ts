@@ -3,7 +3,7 @@ import {
   ICreateUserUseCase,
   IGetUserByEmailRepository,
 } from "../../controllers/users/protocols.js"
-import { UserAlreadyExistsError } from "../../errors/UserAlreadyExistsError.js"
+import { UserAlreadyExistsError } from "../../errors/users/user-errors.js"
 import { CreateUserInput } from "../../validators/create-user.schema.js"
 import bcrypt from "bcrypt"
 

@@ -6,7 +6,7 @@ import {
 } from "../../validators/create-user.schema.js"
 import { HttpRequest, HttpResponse, ValidationError } from "../protocols.js"
 import { ICreateUserController, ICreateUserUseCase } from "./protocols.js"
-import { UserAlreadyExistsError } from "../../errors/UserAlreadyExistsError.js"
+import { UserAlreadyExistsError } from "../../errors/users/user-errors.js"
 
 export class CreateUserController implements ICreateUserController {
   constructor(private createUserUseCase: ICreateUserUseCase) {}
