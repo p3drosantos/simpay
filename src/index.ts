@@ -15,6 +15,9 @@ import { UpdateEventController } from "./controllers/events/update-event.js"
 import { DeleteEventController } from "./controllers/events/delete-event.js"
 import { DeleteEventRepository } from "./repositories/events/delete-event.js"
 import { DeleteEventUseCase } from "./use-cases/events/delete-event.js"
+import { CreateUserController } from "./controllers/users/create-user.js"
+import { CreateUserRepository } from "./repositories/users/create-user.js"
+import { CreateUserUseCase } from "./use-cases/users/create-user.js"
 dotenv.config()
 
 const app = express()
@@ -109,6 +112,25 @@ app.delete("/events/:id", async (req, res) => {
     return res.status(response.statusCode).json(response.body)
   } catch (error) {
     console.error("ERRO NA ROTA DELETE /events/:id:")
+    console.error(error)
+
+    return res.status(500).json({ error: String(error) })
+  }
+})
+
+app.post("/users", async (req, res) => {
+  try {
+    const createUserRepository = new CreateUserRepository()
+    const createUserUseCase = new CreateUserUseCase(createUserRepository)
+    const createUserController = new CreateUserController(createUserUseCase)
+
+    const response = await createUserController.createUser({
+      body: req.body,
+    })
+
+    return res.status(response.statusCode).json(response.body)
+  } catch (error) {
+    console.error("ERRO NA ROTA /users:")
     console.error(error)
 
     return res.status(500).json({ error: String(error) })
