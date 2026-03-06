@@ -1,4 +1,5 @@
 import { Event } from "../../models/event.js"
+import { CreateEventUseCaseinput } from "../../use-cases/events/create-event.js"
 import {
   CreateEventInput,
   UpdateEventInput,
@@ -6,11 +7,11 @@ import {
 import { HttpRequest, HttpResponse, ValidationError } from "../protocols.js"
 
 export interface ICreateEventsRepository {
-  createEvent: (params: CreateEventInput) => Promise<Event>
+  createEvent: (params: CreateEventUseCaseinput) => Promise<Event>
 }
 
 export interface ICreateEventUseCase {
-  createEvent: (params: CreateEventInput) => Promise<Event>
+  createEvent: (params: CreateEventUseCaseinput) => Promise<Event>
 }
 
 export interface ICreateEventController {

@@ -22,9 +22,11 @@ export class CreateEventController implements ICreateEventController {
       }
 
       const parsed = createEventSchema.parse(request.body)
+      console.log("user id", request.userId)
 
       const event = await this.createEventUseCase.createEvent({
         ...parsed,
+        ownerId: request.userId!,
       })
       return {
         statusCode: 201,

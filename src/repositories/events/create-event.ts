@@ -4,7 +4,7 @@ import "dotenv/config"
 import * as schema from "../../db/schema.js"
 import { ICreateEventsRepository } from "../../controllers/events/protocols.js"
 import { Event } from "../../models/event.js"
-import { CreateEventInput } from "../../validators/create-event.schema.js"
+import { CreateEventUseCaseinput } from "../../use-cases/events/create-event.js"
 
 if (!process.env.DATABASE_URL) {
   throw new Error("Missing DATABASE_URL")
@@ -13,7 +13,7 @@ if (!process.env.DATABASE_URL) {
 const db = drizzle(process.env.DATABASE_URL, { schema })
 
 export class CreateEventRepository implements ICreateEventsRepository {
-  async createEvent(params: CreateEventInput): Promise<Event> {
+  async createEvent(params: CreateEventUseCaseinput): Promise<Event> {
     const table = schema.eventsTable
 
     const [event] = await db

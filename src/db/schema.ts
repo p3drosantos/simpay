@@ -9,7 +9,9 @@ import {
 
 export const eventsTable = pgTable("events", {
   id: uuid().primaryKey().defaultRandom(),
-  ownerId: uuid().notNull(),
+  ownerId: uuid()
+    .notNull()
+    .references(() => userTable.id),
   name: text().notNull(),
   ticketPriceInCents: integer("ticket_price_in_cents").notNull(),
   longitude: decimal({ precision: 10, scale: 6 }).notNull(),

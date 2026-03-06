@@ -35,6 +35,7 @@ app.post("/events", authMiddleware, async (req, res) => {
 
     const response = await createEventController.createEvent({
       body: req.body,
+      userId: req.userId,
     })
 
     return res.status(response.statusCode).json(response.body)

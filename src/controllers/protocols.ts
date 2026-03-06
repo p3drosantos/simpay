@@ -8,6 +8,7 @@ export interface HttpRequest<
   params?: TParams
   query?: TQuery
   headers?: THeaders
+  userId?: string
 }
 
 export interface HttpResponse<T> {

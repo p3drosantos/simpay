@@ -1,7 +1,6 @@
 import { z } from "zod"
 
 export const createEventSchema = z.object({
-  ownerId: z.uuid("Invalid owner ID"),
   name: z.string().min(3, "Event name is required"),
   ticketPriceInCents: z
     .number()

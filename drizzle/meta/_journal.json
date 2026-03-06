@@ -5,8 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1772734360549,
-      "tag": "0000_add_users_table",
+      "when": 1772828827304,
+      "tag": "0000_init",
       "breakpoints": true
     }
   ]
