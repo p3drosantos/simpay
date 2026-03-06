@@ -21,12 +21,13 @@ import { CreateUserUseCase } from "./use-cases/users/create-user.js"
 import { GetUserByEmailRepository } from "./repositories/users/get-user-by-email.js"
 import { LoginUseCase } from "./use-cases/auth/login.js"
 import { LoginController } from "./controllers/auth/login.js"
+import { authMiddleware } from "./middlewares/auth.middleware.js"
 dotenv.config()
 
 const app = express()
 app.use(express.json())
 
-app.post("/events", async (req, res) => {
+app.post("/events", authMiddleware, async (req, res) => {
   try {
     const createEventRepository = new CreateEventRepository()
     const createEventUseCase = new CreateEventUseCase(createEventRepository)
