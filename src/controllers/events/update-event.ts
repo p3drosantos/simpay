@@ -7,6 +7,8 @@ import {
   updateEventSchema,
 } from "../../validators/create-event.schema.js"
 import { ZodError } from "zod"
+import { EventNotFoundError } from "../../errors/users/event.js"
+import { UnauthorizedError } from "../../errors/users/user-errors.js"
 
 export class UpdateEventController implements IUpdateEventController {
   constructor(private updateEventUseCase: IUpdateEventUseCase) {}
@@ -41,8 +43,15 @@ export class UpdateEventController implements IUpdateEventController {
 
       const parsed = updateEventSchema.parse(request.body)
 
+      const userId = request.userId
+
+      if (!userId) {
+        return { statusCode: 401, body: { error: "Unauthorized" } }
+      }
+
       const updatedEvent = await this.updateEventUseCase.updateEvent(
         request.params.id,
+        userId,
         parsed
       )
 
@@ -65,6 +74,14 @@ export class UpdateEventController implements IUpdateEventController {
             })),
           },
         }
+      }
+
+      if (error instanceof EventNotFoundError) {
+        return { statusCode: 404, body: { error: error.message } }
+      }
+
+      if (error instanceof UnauthorizedError) {
+        return { statusCode: 401, body: { error: error.message } }
       }
 
       return { statusCode: 500, body: { error: "Internal server error" } }

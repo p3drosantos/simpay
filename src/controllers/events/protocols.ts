@@ -58,6 +58,7 @@ export interface IUpdateEventRepository {
 export interface IUpdateEventUseCase {
   updateEvent: (
     id: string,
+    userId: string,
     data: Partial<UpdateEventInput>
   ) => Promise<Event | null>
 }

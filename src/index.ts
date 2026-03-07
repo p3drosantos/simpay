@@ -89,12 +89,17 @@ app.get("/events", authMiddleware, async (req, res) => {
 app.put("/events/:id", authMiddleware, async (req, res) => {
   try {
     const updateEventRepository = new UpdateEventRepository()
-    const updateEventUseCase = new UpdateEventUseCase(updateEventRepository)
+    const getEventByIdRepository = new GetEventByIdRepository()
+    const updateEventUseCase = new UpdateEventUseCase(
+      updateEventRepository,
+      getEventByIdRepository
+    )
     const updateEventController = new UpdateEventController(updateEventUseCase)
 
     const response = await updateEventController.updateEvent({
       params: req.params as { id: string },
       body: req.body,
+      userId: req.userId,
     })
     return res.status(response.statusCode).json(response.body)
   } catch (error) {
