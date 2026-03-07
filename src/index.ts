@@ -113,11 +113,16 @@ app.put("/events/:id", authMiddleware, async (req, res) => {
 app.delete("/events/:id", authMiddleware, async (req, res) => {
   try {
     const deleteEventRepository = new DeleteEventRepository()
-    const deleteEventUseCase = new DeleteEventUseCase(deleteEventRepository)
+    const getEventByIdRepository = new GetEventByIdRepository()
+    const deleteEventUseCase = new DeleteEventUseCase(
+      deleteEventRepository,
+      getEventByIdRepository
+    )
     const deleteEventController = new DeleteEventController(deleteEventUseCase)
 
     const response = await deleteEventController.deleteEvent({
       params: req.params as { id: string },
+      userId: req.userId,
     })
     return res.status(response.statusCode).json(response.body)
   } catch (error) {

@@ -74,7 +74,7 @@ export interface IDeleteEventRepository {
 }
 
 export interface IDeleteEventUseCase {
-  deleteEvent: (id: string) => Promise<Event | null>
+  deleteEvent: (id: string, userId: string) => Promise<Event | null>
 }
 
 export interface IDeleteEventController {
