@@ -23,6 +23,22 @@ export class UpdateEventController implements IUpdateEventController {
         return { statusCode: 400, body: { error: "No fields to update" } }
       }
 
+      const allowedFields = ["name", "ticketPriceInCents", "date"]
+      const invalidFields = Object.keys(request.body).filter(
+        (key) => !allowedFields.includes(key)
+      )
+
+      if (invalidFields.length > 0) {
+        return {
+          statusCode: 400,
+          body: {
+            error: `Invalid fields: ${invalidFields.join(
+              ", "
+            )}. Allowed fields are: ${allowedFields.join(", ")}`,
+          },
+        }
+      }
+
       const parsed = updateEventSchema.parse(request.body)
 
       const updatedEvent = await this.updateEventUseCase.updateEvent(
