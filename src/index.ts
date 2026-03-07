@@ -47,7 +47,7 @@ app.post("/events", authMiddleware, async (req, res) => {
   }
 })
 
-app.get("/events/:id", async (req, res) => {
+app.get("/events/:id", authMiddleware, async (req, res) => {
   try {
     const getEventByIdRepository = new GetEventByIdRepository()
     const getEventByIdUseCase = new GetEventByIdUseCase(getEventByIdRepository)
@@ -56,7 +56,7 @@ app.get("/events/:id", async (req, res) => {
     )
 
     const response = await getEventByIdController.getEventById({
-      params: req.params,
+      params: req.params as { id: string },
     })
 
     return res.status(response.statusCode).json(response.body)
@@ -68,7 +68,7 @@ app.get("/events/:id", async (req, res) => {
   }
 })
 
-app.get("/events", async (req, res) => {
+app.get("/events", authMiddleware, async (req, res) => {
   try {
     const getAllEventsRepository = new GetAllEventsRepository()
     const getAllEventsUseCase = new GetAllEventsUseCase(getAllEventsRepository)
@@ -86,14 +86,14 @@ app.get("/events", async (req, res) => {
   }
 })
 
-app.put("/events/:id", async (req, res) => {
+app.put("/events/:id", authMiddleware, async (req, res) => {
   try {
     const updateEventRepository = new UpdateEventRepository()
     const updateEventUseCase = new UpdateEventUseCase(updateEventRepository)
     const updateEventController = new UpdateEventController(updateEventUseCase)
 
     const response = await updateEventController.updateEvent({
-      params: req.params,
+      params: req.params as { id: string },
       body: req.body,
     })
     return res.status(response.statusCode).json(response.body)
@@ -105,14 +105,14 @@ app.put("/events/:id", async (req, res) => {
   }
 })
 
-app.delete("/events/:id", async (req, res) => {
+app.delete("/events/:id", authMiddleware, async (req, res) => {
   try {
     const deleteEventRepository = new DeleteEventRepository()
     const deleteEventUseCase = new DeleteEventUseCase(deleteEventRepository)
     const deleteEventController = new DeleteEventController(deleteEventUseCase)
 
     const response = await deleteEventController.deleteEvent({
-      params: req.params,
+      params: req.params as { id: string },
     })
     return res.status(response.statusCode).json(response.body)
   } catch (error) {
