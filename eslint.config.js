@@ -12,7 +12,12 @@ export default defineConfig([
   },
   {
     files: ["**/*.{js,mjs,cjs,ts,mts,cts}"],
-    languageOptions: { globals: globals.node },
+    languageOptions: {
+      globals: {
+        ...globals.node,
+        ...globals.jest,
+      },
+    },
   },
   tseslint.configs.recommended,
   eslintConfigPrettier,
