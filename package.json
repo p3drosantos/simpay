@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "test:watch": "jest --watch",
+    "test:watch": "jest --watch --silent",
     "test:coverage": "jest --coverage",
     "prepare": "husky",
     "dev": "tsx watch src/index.ts"
