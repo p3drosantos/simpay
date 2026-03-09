@@ -69,6 +69,14 @@ describe("CreateUserController", () => {
     const response = await sut.createUser(request)
 
     expect(response.statusCode).toBe(400)
+    expect(response.body).toEqual({
+      error: [
+        {
+          field: "email",
+          message: "Invalid email address",
+        },
+      ],
+    })
   })
 
   it("should return 409 if user already exists", async () => {
