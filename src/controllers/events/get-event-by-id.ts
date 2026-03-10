@@ -1,3 +1,4 @@
+import { ZodError } from "zod"
 import { getEventByIdSchema } from "../../validators/create-event.schema.js"
 import { HttpRequest } from "../protocols.js"
 import { IGetEventByIdController, IGetEventByIdUseCase } from "./protocols.js"
@@ -23,10 +24,10 @@ export class GetEventByIdController implements IGetEventByIdController {
         body: event,
       }
     } catch (error) {
-      if (error instanceof Error) {
+      if (error instanceof ZodError) {
         return {
           statusCode: 400,
-          body: { error: error.message },
+          body: { error: "Invalid event ID" },
         }
       }
 
