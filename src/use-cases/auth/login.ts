@@ -8,13 +8,14 @@ import {
   UserNotFoundError,
 } from "../../errors/users/user-errors.js"
 import { LoginInput } from "../../validators/login.schema.js"
-import jwt from "jsonwebtoken"
 import { IHashCompare } from "../../interfaces/hash-provider.js"
+import { ITokenGenerator } from "../../interfaces/token-generator.js"
 
 export class LoginUseCase implements ILoginUseCase {
   constructor(
     private getUserByEmailRepository: IGetUserByEmailRepository,
-    private hashCompare: IHashCompare
+    private hashCompare: IHashCompare,
+    private tokenGenerator: ITokenGenerator
   ) {}
 
   async login(params: LoginInput): Promise<LoginResponse> {
@@ -33,8 +34,8 @@ export class LoginUseCase implements ILoginUseCase {
       throw new InvalidCredentialsError()
     }
 
-    const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET!, {
-      expiresIn: "1d",
+    const token = this.tokenGenerator.generate({
+      userId: user.id,
     })
 
     return {
