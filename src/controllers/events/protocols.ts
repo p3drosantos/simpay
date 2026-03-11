@@ -82,3 +82,11 @@ export interface IDeleteEventController {
     request: HttpRequest<unknown, { id: string }>
   ) => Promise<HttpResponse<Event | { error: ValidationError[] | string }>>
 }
+
+export interface IGetEventByLocationAndDateRepository {
+  getEventByLocationAndDate: (
+    longitude: number,
+    latitude: number,
+    date: Date
+  ) => Promise<Event | null>
+}
