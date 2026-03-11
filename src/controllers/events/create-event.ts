@@ -20,13 +20,20 @@ export class CreateEventController implements ICreateEventController {
           body: { error: "Missing body" },
         }
       }
-
       const parsed = createEventSchema.parse(request.body)
-      console.log("user id", request.userId)
+
+      const userId = request.userId
+
+      if (!userId) {
+        return {
+          statusCode: 401,
+          body: { error: "Unauthorized: Missing user ID" },
+        }
+      }
 
       const event = await this.createEventUseCase.createEvent({
         ...parsed,
-        ownerId: request.userId!,
+        ownerId: userId,
       })
       return {
         statusCode: 201,

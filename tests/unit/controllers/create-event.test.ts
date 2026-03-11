@@ -42,12 +42,19 @@ describe("CreateEventController", () => {
 
     mockUseCase.createEvent.mockResolvedValue(responseMock)
 
-    const request = makeRequest()
+    const request = {
+      ...makeRequest(),
+      userId: "owner-id",
+    }
 
     const response = await sut.createEvent(request)
 
     expect(response.statusCode).toBe(201)
     expect(response.body).toEqual(responseMock)
+    expect(mockUseCase.createEvent).toHaveBeenCalledWith({
+      ...request.body,
+      ownerId: "owner-id",
+    })
   })
 
   it("Should return 400 when missing body", async () => {
@@ -59,6 +66,16 @@ describe("CreateEventController", () => {
     expect(response.body).toEqual({
       error: "Missing body",
     })
+  })
+
+  it("Should return 401 if user is not authenticated", async () => {
+    const { sut, mockUseCase } = makeSut()
+
+    const response = await sut.createEvent(makeRequest())
+
+    expect(response.statusCode).toBe(401)
+    expect(response.body).toEqual({ error: "Unauthorized: Missing user ID" })
+    expect(mockUseCase.createEvent).not.toHaveBeenCalled()
   })
 
   it("should return 400 if anywhere params is invalid", async () => {
@@ -96,7 +113,10 @@ describe("CreateEventController", () => {
 
     mockUseCase.createEvent.mockRejectedValue(new Error())
 
-    const request = makeRequest()
+    const request = {
+      ...makeRequest(),
+      userId: "owner-id",
+    }
 
     const response = await sut.createEvent(request)
 
