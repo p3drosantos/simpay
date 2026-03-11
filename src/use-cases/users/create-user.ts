@@ -4,13 +4,14 @@ import {
   IGetUserByEmailRepository,
 } from "../../controllers/users/protocols.js"
 import { UserAlreadyExistsError } from "../../errors/users/user-errors.js"
+import { IHashGenerate } from "../../interfaces/hash-provider.js"
 import { CreateUserInput } from "../../validators/create-user.schema.js"
-import bcrypt from "bcrypt"
 
 export class CreateUserUseCase implements ICreateUserUseCase {
   constructor(
     private createUserRepository: ICreateUserRepository,
-    private getUserByEmailRepository: IGetUserByEmailRepository
+    private getUserByEmailRepository: IGetUserByEmailRepository,
+    private hashGenerate: IHashGenerate
   ) {}
 
   async createUser(params: CreateUserInput) {
@@ -21,7 +22,7 @@ export class CreateUserUseCase implements ICreateUserUseCase {
       throw new UserAlreadyExistsError()
     }
 
-    const hashedPassword = await bcrypt.hash(params.password, 10)
+    const hashedPassword = await this.hashGenerate.hash(params.password)
 
     const userParams: CreateUserInput = {
       name: params.name,

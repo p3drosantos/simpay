@@ -7,12 +7,15 @@ import {
   InvalidCredentialsError,
   UserNotFoundError,
 } from "../../errors/users/user-errors.js"
-import bcrypt from "bcrypt"
 import { LoginInput } from "../../validators/login.schema.js"
 import jwt from "jsonwebtoken"
+import { IHashCompare } from "../../interfaces/hash-provider.js"
 
 export class LoginUseCase implements ILoginUseCase {
-  constructor(private getUserByEmailRepository: IGetUserByEmailRepository) {}
+  constructor(
+    private getUserByEmailRepository: IGetUserByEmailRepository,
+    private hashCompare: IHashCompare
+  ) {}
 
   async login(params: LoginInput): Promise<LoginResponse> {
     const user = await this.getUserByEmailRepository.getUserByEmail(
@@ -22,7 +25,10 @@ export class LoginUseCase implements ILoginUseCase {
       throw new UserNotFoundError()
     }
 
-    const isPasswordValid = await bcrypt.compare(params.password, user.password)
+    const isPasswordValid = await this.hashCompare.compare(
+      params.password,
+      user.password
+    )
     if (!isPasswordValid) {
       throw new InvalidCredentialsError()
     }
