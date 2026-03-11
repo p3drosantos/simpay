@@ -21,3 +21,7 @@ export interface ICreateUserController {
 export interface IGetUserByEmailRepository {
   getUserByEmail: (email: string) => Promise<User | null>
 }
+
+export interface IGetUserByIdRepository {
+  getUserById: (id: string) => Promise<User | null>
+}
