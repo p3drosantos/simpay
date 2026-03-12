@@ -6,6 +6,11 @@ import {
   createEventSchema,
 } from "../../validators/create-event.schema.js"
 import { ZodError } from "zod"
+import { UserNotFoundError } from "../../errors/users/user-errors.js"
+import {
+  EventAlreadyExistsError,
+  EventDateIsInThePastError,
+} from "../../errors/users/event.js"
 
 export class CreateEventController implements ICreateEventController {
   constructor(private createEventUseCase: ICreateEventUseCase) {}
@@ -40,6 +45,27 @@ export class CreateEventController implements ICreateEventController {
         body: event,
       }
     } catch (error) {
+      if (error instanceof UserNotFoundError) {
+        return {
+          statusCode: 404,
+          body: { error: error.message },
+        }
+      }
+
+      if (error instanceof EventAlreadyExistsError) {
+        return {
+          statusCode: 400,
+          body: { error: error.message },
+        }
+      }
+
+      if (error instanceof EventDateIsInThePastError) {
+        return {
+          statusCode: 400,
+          body: { error: error.message },
+        }
+      }
+
       if (error instanceof ZodError) {
         return {
           statusCode: 400,
