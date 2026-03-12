@@ -17,6 +17,8 @@ const config: Config = {
   coverageDirectory: "coverage",
 
   globalSetup: "<rootDir>/jest.global-setup.js",
+
+  setupFilesAfterEnv: ["<rootDir>/jest.setup-after-env.ts"],
 }
 
 export default config
