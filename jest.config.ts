@@ -15,6 +15,8 @@ const config: Config = {
   collectCoverageFrom: ["src/**/*.ts", "!src/index.ts"],
 
   coverageDirectory: "coverage",
+
+  globalSetup: "<rootDir>/jest.global-setup.js",
 }
 
 export default config

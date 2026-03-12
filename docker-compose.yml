@@ -14,5 +14,16 @@ services:
     volumes:
       - simpay-postgres-data:/var/lib/postgresql/data
 
+  postgres-test:
+    image: postgres:17
+    container_name: fsc-events-postgres-test
+    restart: always
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: simpay_test
+
 volumes:
   simpay-postgres-data:
