@@ -35,6 +35,8 @@ export class GetEventByLocationAndDateRepository
       )
       .limit(1)
 
+    if (!event) return null
+
     return {
       ...event,
       longitude: Number(event.longitude),
