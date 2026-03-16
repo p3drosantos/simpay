@@ -12,7 +12,12 @@ const config: Config = {
 
   testMatch: ["**/tests/**/*.test.ts", "**/tests/**/*.spec.ts"],
 
-  collectCoverageFrom: ["src/**/*.ts", "!src/index.ts"],
+  collectCoverageFrom: [
+    "src/**/*.ts",
+    "!src/index.ts",
+    "!src/server.ts",
+    "!src/types/**",
+  ],
 
   coverageDirectory: "coverage",
 
