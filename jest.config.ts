@@ -19,6 +19,8 @@ const config: Config = {
   globalSetup: "<rootDir>/jest.global-setup.js",
 
   setupFilesAfterEnv: ["<rootDir>/jest.setup-after-env.ts"],
+
+  maxWorkers: 1,
 }
 
 export default config
