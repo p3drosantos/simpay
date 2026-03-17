@@ -12,6 +12,7 @@ describe("CreateEventRepository", () => {
       name: "Owner",
       email: "owner@example.com",
       password: "123456",
+      role: "customer" as const,
     })
 
     const eventData = {
@@ -38,6 +39,7 @@ describe("CreateEventRepository", () => {
       name: "Persist Owner",
       email: "persist_owner@example.com",
       password: "123456",
+      role: "customer" as const,
     })
 
     const eventData = {

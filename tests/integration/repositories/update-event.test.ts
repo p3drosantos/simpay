@@ -14,6 +14,7 @@ describe("UpdateEventRepository", () => {
       name: "Owner",
       email: "owner_update@example.com",
       password: "123456",
+      role: "customer" as const,
     })
 
     const createdEvent = await createEventRepo.createEvent({

@@ -42,6 +42,7 @@ describe("CreateUserUseCase", () => {
         name: "any_name",
         email: "any_email",
         password: "any_password",
+        role: "customer" as const,
         ...overrides,
       }
     }
@@ -97,6 +98,7 @@ describe("CreateUserUseCase", () => {
       name: "any_name",
       email: "any_email",
       password: "any_password",
+      role: "customer" as const,
     })
 
     await expect(promise).rejects.toThrow(UserAlreadyExistsError)
@@ -114,6 +116,7 @@ describe("CreateUserUseCase", () => {
         name: "any_name",
         email: "any_email",
         password: "any_password",
+        role: "customer" as const,
       })
     ).rejects.toThrow()
   })
@@ -130,6 +133,7 @@ describe("CreateUserUseCase", () => {
         name: "any_name",
         email: "any_email",
         password: "any_password",
+        role: "customer" as const,
       })
     ).rejects.toThrow()
   })

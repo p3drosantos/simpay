@@ -15,6 +15,7 @@ describe("DeleteEventRepository", () => {
       name: "Owner",
       email: "owner_delete@example.com",
       password: "123456",
+      role: "customer" as const,
     })
 
     const event = await createEventRepo.createEvent({

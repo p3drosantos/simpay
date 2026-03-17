@@ -10,6 +10,7 @@ describe("GetUserByEmailRepository", () => {
       name: "any_name",
       email: "any_email",
       password: "any_password",
+      role: "customer" as const,
     })
 
     const found = await sut.getUserByEmail("any_email")

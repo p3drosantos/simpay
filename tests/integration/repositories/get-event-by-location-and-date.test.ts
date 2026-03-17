@@ -12,6 +12,7 @@ describe("GetEventByLocationAndDateRepository", () => {
       name: "Owner",
       email: "owner_location@example.com",
       password: "123456",
+      role: "customer" as const,
     })
 
     const date = new Date()

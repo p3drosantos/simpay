@@ -20,6 +20,7 @@ describe("GetAllEventsRepository", () => {
       name: "Owner",
       email: "owner_get_all@example.com",
       password: "123456",
+      role: "customer" as const,
     })
 
     const event1 = await createEventRepo.createEvent({

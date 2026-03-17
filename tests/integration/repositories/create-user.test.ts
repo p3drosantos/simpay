@@ -10,6 +10,7 @@ describe("CreateUserRepository", () => {
       name: "any_name",
       email: "any_email",
       password: "any_password",
+      role: "customer" as const,
     })
 
     expect(result.name).toBe("any_name")
@@ -24,9 +25,9 @@ describe("CreateUserRepository", () => {
       name: "db_name",
       email: "db_email",
       password: "db_password",
+      role: "customer" as const,
     })
 
-    // usa o db importado direto, sem instanciar
     const users = await db.select().from(schema.userTable)
 
     const found = users.find((u) => u.id === created.id)

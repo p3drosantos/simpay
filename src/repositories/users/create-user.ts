@@ -22,6 +22,7 @@ export class CreateUserRepository implements ICreateUserRepository {
         name: params.name,
         email: params.email,
         password: params.password,
+        role: params.role,
       })
       .returning()
 
@@ -30,6 +31,7 @@ export class CreateUserRepository implements ICreateUserRepository {
       name: user.name,
       email: user.email,
       password: user.password,
+      role: user.role,
       createdAt: new Date(user.createdAt),
     }
   }

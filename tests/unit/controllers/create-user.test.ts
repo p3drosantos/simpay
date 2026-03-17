@@ -19,6 +19,7 @@ const makeRequest = (overrides = {}) => ({
     name: "Pedro Santos",
     email: "pedro.santos@example.com",
     password: "password123",
+    role: "customer" as const,
     ...overrides,
   },
 })

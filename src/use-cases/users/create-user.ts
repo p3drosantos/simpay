@@ -28,6 +28,7 @@ export class CreateUserUseCase implements ICreateUserUseCase {
       name: params.name,
       email: params.email,
       password: hashedPassword,
+      role: params.role,
     }
 
     const user = await this.createUserRepository.createUser(userParams)

@@ -6,6 +6,7 @@ describe("Users E2E", () => {
     name: "Pedro",
     email: "pedro@test.com",
     password: "123456",
+    role: "customer" as const,
   }
 
   it("should create user", async () => {
