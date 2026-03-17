@@ -4,9 +4,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "dotenv -e .env.test -- jest",
-    "test:watch": "dotenv -e .env.test -- jest --watch --silent",
-    "test:coverage": "jest --coverage",
+    "test": "dotenv -e .env.test -- jest --runInBand",
+    "test:watch": "dotenv -e .env.test -- jest --runInBand --watch --silent",
+    "test:coverage": "dotenv -e .env.test -- jest --coverage --runInBand --detectOpenHandles",
     "prepare": "husky",
     "dev": "tsx watch src/index.ts"
   },
@@ -38,6 +38,7 @@
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^25.3.0",
     "@types/pg": "^8.16.0",
+    "@types/supertest": "^7.2.0",
     "drizzle-kit": "^0.31.9",
     "eslint": "^10.0.2",
     "eslint-config-prettier": "10.1.8",
@@ -46,6 +47,7 @@
     "jest": "^30.2.0",
     "lint-staged": "12.3.2",
     "prettier": "3.6.2",
+    "supertest": "^7.2.2",
     "ts-jest": "^29.4.6",
     "ts-node-dev": "^2.0.0",
     "tsx": "^4.21.0",
