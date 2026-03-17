@@ -35,6 +35,7 @@ export class UpdateEventRepository implements IUpdateEventRepository {
       id: updatedEvent.id,
       ownerId: updatedEvent.ownerId,
       name: updatedEvent.name,
+      maxTickets: updatedEvent.maxTickets,
       ticketPriceInCents: updatedEvent.ticketPriceInCents,
       longitude: Number(updatedEvent.longitude),
       latitude: Number(updatedEvent.latitude),

@@ -2,6 +2,7 @@ import { z } from "zod"
 
 export const createEventSchema = z.object({
   name: z.string().min(3, "Event name is required"),
+  maxTickets: z.number().positive("Max tickets must be a positive number"),
   ticketPriceInCents: z
     .number()
     .positive("Ticket price must be a positive number"),

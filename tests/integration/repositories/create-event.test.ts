@@ -18,6 +18,7 @@ describe("CreateEventRepository", () => {
     const eventData = {
       ownerId: owner.id,
       name: "Test Event",
+      maxTickets: 10,
       ticketPriceInCents: 5000,
       longitude: -46.633308,
       latitude: -23.55052,
@@ -45,6 +46,7 @@ describe("CreateEventRepository", () => {
     const eventData = {
       ownerId: owner.id,
       name: "Persisted Event",
+      maxTickets: 5,
       ticketPriceInCents: 7500,
       longitude: -46.632,
       latitude: -23.551,

@@ -21,6 +21,7 @@ export class CreateEventRepository implements ICreateEventsRepository {
       .values({
         ownerId: params.ownerId,
         name: params.name,
+        maxTickets: params.maxTickets,
         ticketPriceInCents: params.ticketPriceInCents,
         longitude: params.longitude.toString(),
         latitude: params.latitude.toString(),
@@ -31,6 +32,7 @@ export class CreateEventRepository implements ICreateEventsRepository {
       id: event.id,
       ownerId: event.ownerId,
       name: event.name,
+      maxTickets: event.maxTickets,
       ticketPriceInCents: event.ticketPriceInCents,
       longitude: Number(event.longitude),
       latitude: Number(event.latitude),

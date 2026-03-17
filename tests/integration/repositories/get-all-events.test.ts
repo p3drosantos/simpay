@@ -26,6 +26,7 @@ describe("GetAllEventsRepository", () => {
     const event1 = await createEventRepo.createEvent({
       ownerId: owner.id,
       name: "Event 1",
+      maxTickets: 10,
       ticketPriceInCents: 1000,
       longitude: -46,
       latitude: -23,
@@ -35,6 +36,7 @@ describe("GetAllEventsRepository", () => {
     const event2 = await createEventRepo.createEvent({
       ownerId: owner.id,
       name: "Event 2",
+      maxTickets: 5,
       ticketPriceInCents: 2000,
       longitude: -47,
       latitude: -24,

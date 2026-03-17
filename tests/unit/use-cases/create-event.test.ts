@@ -38,6 +38,7 @@ futureDate.setDate(futureDate.getDate() + 1)
 const params = {
   name: "Evento teste",
   ticketPriceInCents: 1000,
+  maxTickets: 10,
   latitude: 10,
   longitude: 10,
   date: futureDate,

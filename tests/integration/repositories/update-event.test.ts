@@ -20,6 +20,7 @@ describe("UpdateEventRepository", () => {
     const createdEvent = await createEventRepo.createEvent({
       ownerId: owner.id,
       name: "Old name",
+      maxTickets: 10,
       ticketPriceInCents: 1000,
       longitude: -46,
       latitude: -23,

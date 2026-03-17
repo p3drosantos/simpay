@@ -18,6 +18,7 @@ describe("GetEventByIdRepository", () => {
     const createdEvent = await createEventRepo.createEvent({
       ownerId: owner.id,
       name: "Event Test",
+      maxTickets: 10,
       ticketPriceInCents: 5000,
       longitude: -46,
       latitude: -23,

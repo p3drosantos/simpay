@@ -21,6 +21,7 @@ describe("DeleteEventRepository", () => {
     const event = await createEventRepo.createEvent({
       ownerId: owner.id,
       name: "Event To Delete",
+      maxTickets: 5,
       ticketPriceInCents: 5000,
       longitude: -46.632,
       latitude: -23.551,

@@ -20,6 +20,7 @@ describe("GetEventByLocationAndDateRepository", () => {
     const createdEvent = await createEventRepo.createEvent({
       ownerId: owner.id,
       name: "Location Event",
+      maxTickets: 10,
       ticketPriceInCents: 1000,
       longitude: -46.63,
       latitude: -23.55,

@@ -18,6 +18,7 @@ const date = new Date(new Date().setDate(new Date().getDate() + 1))
 const makeRequest = (overrides = {}) => ({
   body: {
     name: "Pedro Santos Aniversario",
+    maxTickets: 100,
     ticketPriceInCents: 1000,
     longitude: 20,
     latitude: 20,

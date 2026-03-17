@@ -26,6 +26,7 @@ export class GetEventByIdRepository implements IGetEventByIdRepository {
       id: event.id,
       ownerId: event.ownerId,
       name: event.name,
+      maxTickets: event.maxTickets,
       ticketPriceInCents: event.ticketPriceInCents,
       longitude: Number(event.longitude),
       latitude: Number(event.latitude),

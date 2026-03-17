@@ -3,11 +3,14 @@ import { app } from "../../src/app"
 
 describe("Events E2E", () => {
   async function createUserAndLogin(email = "pedro@test.com") {
-    await request(app).post("/users").send({
-      name: "Pedro",
-      email,
-      password: "123456",
-    })
+    await request(app)
+      .post("/users")
+      .send({
+        name: "Pedro",
+        email,
+        password: "123456",
+        role: "customer" as const,
+      })
 
     const login = await request(app).post("/users/login").send({
       email,
@@ -19,6 +22,7 @@ describe("Events E2E", () => {
 
   const eventBody = {
     name: "Event",
+    maxTickets: 10,
     ticketPriceInCents: 100,
     longitude: 10,
     latitude: 10,

@@ -17,6 +17,7 @@ const mockEvent = {
   id: "event-id",
   ownerId: "user-id",
   name: "Evento teste",
+  maxTickets: 10,
   ticketPriceInCents: 1000,
   longitude: 10,
   latitude: 10,

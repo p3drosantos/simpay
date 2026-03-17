@@ -33,6 +33,7 @@ describe("DeleteEventController", () => {
       title: "Futebol",
       description: "Partida de futebol",
       date: date,
+      maxTickets: 100,
       createdAt: new Date(),
     }
 

@@ -34,6 +34,7 @@ describe("Update Event Controller", () => {
       id: "any_id",
       ownerId: "any_owner_id",
       name: "any_name",
+      maxTickets: 10,
       ticketPriceInCents: 1000,
       longitude: 20,
       latitude: 20,
