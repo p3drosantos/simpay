@@ -1,3 +1,4 @@
+import { ZodError } from "zod"
 import { EventNotFoundError } from "../../errors/users/event.js"
 import {
   EventCapacityExceededError,
@@ -83,6 +84,21 @@ export class BuyTicketController implements IBuyTicketController {
         return {
           statusCode: 400,
           body: { error: "Event capacity exceeded" },
+        }
+      }
+
+      if (error instanceof ZodError) {
+        return {
+          statusCode: 400,
+          body: {
+            error: error.issues.map((issue) => ({
+              field: issue.path.join("."),
+              message:
+                issue.code === "invalid_type"
+                  ? `${issue.path.join(".")} is required`
+                  : issue.message,
+            })),
+          },
         }
       }
 
