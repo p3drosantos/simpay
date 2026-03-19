@@ -24,6 +24,7 @@ export enum HttpStatusCode {
   NOT_FOUND = 404,
   CONFLICT = 409,
   UNAUTHORIZED = 401,
+  FORBIDDEN = 403,
 }
 
 export type ValidationError = {
