@@ -14,6 +14,6 @@ export interface IBuyTicketUseCase {
 
 export interface IBuyTicketController {
   buyTicket(
-    request: HttpRequest<BuyTicketsInput, { id: string }>
+    request: HttpRequest<BuyTicketsInput, { eventId: string }>
   ): Promise<HttpResponse<Ticket | { error: ValidationError[] | string }>>
 }

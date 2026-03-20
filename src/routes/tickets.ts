@@ -4,14 +4,14 @@ import { authMiddleware } from "../middlewares/auth.middleware.js"
 
 const ticketRouter = Router()
 
-ticketRouter.post("/:id", authMiddleware, async (req, res) => {
+ticketRouter.post("/:eventId", authMiddleware, async (req, res) => {
   try {
     const buyTicketController = makeBuyTicketController()
 
     const response = await buyTicketController.buyTicket({
       body: req.body,
       userId: req.userId,
-      params: req.params as { id: string },
+      params: req.params as { eventId: string },
     })
     return res.status(response.statusCode).json(response.body)
   } catch (error) {

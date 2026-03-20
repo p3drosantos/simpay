@@ -17,7 +17,7 @@ export class BuyTicketController implements IBuyTicketController {
   constructor(private buyTicketUseCase: IBuyTicketUseCase) {}
 
   async buyTicket(
-    request: HttpRequest<BuyTicketsInput, { id: string }>
+    request: HttpRequest<BuyTicketsInput, { eventId: string }>
   ): Promise<HttpResponse<Ticket | { error: ValidationError[] | string }>> {
     try {
       if (!request.body) {
@@ -29,7 +29,7 @@ export class BuyTicketController implements IBuyTicketController {
 
       const parsed = buyTicketsSchema.parse(request.body)
 
-      const id = request.params?.id
+      const eventid = request.params?.eventId
 
       const buyerId = request.userId
 
@@ -40,7 +40,7 @@ export class BuyTicketController implements IBuyTicketController {
         }
       }
 
-      if (!id) {
+      if (!eventid) {
         return {
           statusCode: 400,
           body: { error: "Missing event ID" },
@@ -49,7 +49,7 @@ export class BuyTicketController implements IBuyTicketController {
 
       const ticketParams = {
         ...parsed,
-        eventId: id,
+        eventId: eventid,
         buyerId: buyerId,
       }
 
