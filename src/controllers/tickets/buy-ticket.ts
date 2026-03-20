@@ -1,6 +1,7 @@
 import { ZodError } from "zod"
 import { EventNotFoundError } from "../../errors/users/event.js"
 import {
+  EventAlreadyOccurredError,
   EventCapacityExceededError,
   OnlyCustomerCanBuyTicketError,
 } from "../../errors/users/ticket.js"
@@ -84,6 +85,13 @@ export class BuyTicketController implements IBuyTicketController {
         return {
           statusCode: 400,
           body: { error: "Event capacity exceeded" },
+        }
+      }
+
+      if (error instanceof EventAlreadyOccurredError) {
+        return {
+          statusCode: 400,
+          body: { error: "Event already occurred" },
         }
       }
 
