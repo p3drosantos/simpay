@@ -19,7 +19,7 @@ app.use(express.json())
 
 app.use("/events", eventRouter)
 app.use("/users", userRouter)
-app.use("/tickets", ticketRouter)
+app.use("/events", ticketRouter)
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
