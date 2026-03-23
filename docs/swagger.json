@@ -5,6 +5,7 @@
     "description": "API for Simpay that allows users to buy tickets for events",
     "version": "1.0.0"
   },
+
   "paths": {
     "/users": {
       "post": {
@@ -29,6 +30,42 @@
           },
           "409": {
             "description": "User already exists"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/users/login": {
+      "post": {
+        "summary": "Login user",
+        "tags": ["Auth"],
+        "parameters": [
+          {
+            "name": "body",
+            "required": true,
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/LoginUserParams"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User logged in",
+            "schema": {
+              "$ref": "#/definitions/LoginResponse"
+            }
+          },
+          "400": {
+            "description": "Invalid params"
+          },
+          "401": {
+            "description": "Invalid credentials"
+          },
+          "404": {
+            "description": "User not found"
           },
           "500": {
             "description": "Internal server error"
@@ -86,6 +123,55 @@
           "type": "string",
           "format": "date-time",
           "example": "2027-01-01T00:00:00.000Z"
+        }
+      }
+    },
+    "UserWithoutPassword": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "example": "e299b4d5-c6e9-4a0a-a133-3a86f9daa3d5"
+        },
+
+        "name": {
+          "type": "string",
+          "example": "John Doe"
+        },
+        "email": {
+          "type": "string",
+          "example": "Jhon@example.com"
+        },
+        "role": {
+          "type": "string",
+          "example": "customer"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "example": "2027-01-01T00:00:00.000Z"
+        }
+      }
+    },
+    "LoginUserParams": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    },
+    "LoginResponse": {
+      "type": "object",
+      "properties": {
+        "token": {
+          "type": "string"
+        },
+        "user": {
+          "$ref": "#/definitions/UserWithoutPassword"
         }
       }
     }
