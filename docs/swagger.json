@@ -219,6 +219,54 @@
             "description": "Internal server error"
           }
         }
+      },
+      "put": {
+        "summary": "Update event",
+        "tags": ["Event"],
+
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateEventParams"
+            }
+          }
+        ],
+
+        "responses": {
+          "200": {
+            "description": "Event updated",
+            "schema": {
+              "$ref": "#/definitions/EventResponse"
+            }
+          },
+          "400": {
+            "description": "Invalid params"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Event not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
       }
     }
   },
@@ -383,6 +431,24 @@
         "latitude": {
           "type": "number",
           "example": 0
+        },
+        "date": {
+          "type": "string",
+          "format": "date-time",
+          "example": "2027-01-01T00:00:00.000Z"
+        }
+      }
+    },
+    "UpdateEventParams": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "example": "New name"
+        },
+        "ticketPriceInCents": {
+          "type": "integer",
+          "example": 500
         },
         "date": {
           "type": "string",
