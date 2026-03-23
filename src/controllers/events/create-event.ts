@@ -54,7 +54,7 @@ export class CreateEventController implements ICreateEventController {
 
       if (error instanceof EventAlreadyExistsError) {
         return {
-          statusCode: 400,
+          statusCode: 409,
           body: { error: error.message },
         }
       }
