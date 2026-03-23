@@ -102,7 +102,7 @@
           "201": {
             "description": "Event created",
             "schema": {
-              "$ref": "#/definitions/CreateEventResponse"
+              "$ref": "#/definitions/EventResponse"
             }
           },
           "401": {
@@ -116,6 +116,25 @@
           },
           "409": {
             "description": "Event already exists"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "get": {
+        "summary": "Get all events",
+        "tags": ["Event"],
+        "security": [{ "BearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Events found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/EventResponse"
+              }
+            }
           },
           "500": {
             "description": "Internal server error"
@@ -255,7 +274,7 @@
         }
       }
     },
-    "CreateEventResponse": {
+    "EventResponse": {
       "type": "object",
       "properties": {
         "id": {
