@@ -29,6 +29,7 @@ jobs:
       - name: Create env test
         run: |
           echo "DATABASE_URL=postgresql://user:password@localhost:5433/simpay_test" >> .env.test
+          echo "JWT_SECRET=test-secret" >> .env.test
 
       - name: Lint
         run: pnpm run lint
