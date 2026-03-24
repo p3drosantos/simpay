@@ -36,6 +36,9 @@ jobs:
       - name: Prettier
         run: pnpm run prettier:check
 
+      - name: Wait for postgres
+        run: sleep 5
+
       - name: Test
         run: pnpm run test
 
