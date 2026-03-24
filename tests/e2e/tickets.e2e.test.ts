@@ -77,7 +77,7 @@ describe("Tickets E2E", () => {
     const eventId = await createEvent(token)
 
     const res = await request(app)
-      .post(`/tickets/${eventId}`)
+      .post(`/events/${eventId}/tickets`)
       .set("Authorization", `Bearer ${token}`)
       .send({
         quantity: 1,
@@ -92,14 +92,14 @@ describe("Tickets E2E", () => {
     const eventId = await createEvent(token)
 
     await request(app)
-      .post(`/tickets/${eventId}`)
+      .post(`/events/${eventId}/tickets`)
       .set("Authorization", `Bearer ${token}`)
       .send({
         quantity: 10,
       })
 
     const res = await request(app)
-      .post(`/tickets/${eventId}`)
+      .post(`/events/${eventId}/tickets`)
       .set("Authorization", `Bearer ${token}`)
       .send({
         quantity: 1,
@@ -111,10 +111,8 @@ describe("Tickets E2E", () => {
   it("should return 400 if event already happened", async () => {
     const token = await createUserAndLogin()
 
-    // 1. cria evento no futuro (API permite)
     const eventId = await createEvent(token, "2099-01-01")
 
-    // 2. altera direto no banco para passado
     await db
       .update(schema.eventsTable)
       .set({
@@ -122,15 +120,13 @@ describe("Tickets E2E", () => {
       })
       .where(eq(schema.eventsTable.id, eventId))
 
-    // 3. tenta comprar ticket
     const res = await request(app)
-      .post(`/tickets/${eventId}`)
+      .post(`/events/${eventId}/tickets`)
       .set("Authorization", `Bearer ${token}`)
       .send({
         quantity: 1,
       })
 
-    // 4. espera erro
     expect(res.status).toBe(400)
   })
 
@@ -140,7 +136,7 @@ describe("Tickets E2E", () => {
     const eventId = await createEvent(token)
 
     const res = await request(app)
-      .post(`/tickets/${eventId}`)
+      .post(`/events/${eventId}/tickets`)
       .set("Authorization", `Bearer ${token}`)
       .send({
         quantity: 1,
@@ -155,7 +151,7 @@ describe("Tickets E2E", () => {
     const eventId = await createEvent(token)
 
     const res = await request(app)
-      .post(`/tickets/${eventId}`)
+      .post(`/events/${eventId}/tickets`)
       .set("Authorization", `Bearer ${token}`)
       .send({})
 

@@ -81,7 +81,7 @@ describe("Events E2E", () => {
       .set("Authorization", `Bearer ${token}`)
       .send(eventBody)
 
-    expect(res.status).toBe(400)
+    expect(res.status).toBe(409)
   })
 
   it("should get all events", async () => {

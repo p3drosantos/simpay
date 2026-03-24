@@ -7,7 +7,6 @@ import ticketRouter from "./routes/tickets.js"
 
 import fs from "fs"
 import path from "path"
-import { fileURLToPath } from "url"
 
 import swaggerUi from "swagger-ui-express"
 
@@ -21,11 +20,8 @@ app.use("/events", eventRouter)
 app.use("/users", userRouter)
 app.use("/events", ticketRouter)
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
+const swaggerPath = path.join(process.cwd(), "docs", "swagger.json")
 
-const swaggerDcocument = JSON.parse(
-  fs.readFileSync(path.join(__dirname, "../docs/swagger.json"), "utf-8")
-)
+const swaggerDocument = JSON.parse(fs.readFileSync(swaggerPath, "utf-8"))
 
-app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDcocument))
+app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument))
