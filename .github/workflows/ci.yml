@@ -19,20 +19,20 @@ jobs:
           node-version: 22
 
       - name: Install
-        run: npm ci
+        run: pnpm ci
 
       - name: Create env test
         run: |
           echo "DATABASE_URL=postgresql://user:password@localhost:5433/simpay_test" >> .env.test
 
       - name: Lint
-        run: npm run lint
+        run: pnpm run lint
 
       - name: Prettier
-        run: npm run prettier:check
+        run: pnpm run prettier:check
 
       - name: Test
-        run: npm run test
+        run: pnpm run test
 
       - name: Build
-        run: npm run build
+        run: pnpm run build
