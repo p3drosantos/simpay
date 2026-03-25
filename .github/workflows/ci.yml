@@ -45,3 +45,27 @@ jobs:
 
       - name: Build
         run: pnpm run build
+
+  migrate:
+    needs: check
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup Node
+        uses: actions/setup-node@v5
+        with:
+          node-version: 22
+
+      - name: Install deps
+        run: pnpm install --frozen-lockfile
+
+      - name: Make envfile
+        uses: SpicyPizza/create-envfile@v2.0
+        with:
+          envkey_DATABSE_URL: ${{ secrets.DATABASE_URL }}
+
+      - name: Run Migrate
+        run: npx drizzle-kit migrate
