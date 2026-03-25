@@ -70,7 +70,7 @@ jobs:
       - name: Make envfile
         uses: SpicyPizza/create-envfile@v2.0
         with:
-          envkey_DATABSE_URL: ${{ secrets.DATABASE_URL }}
+          envkey_DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
       - name: Run Migrate
         run: npx drizzle-kit migrate
