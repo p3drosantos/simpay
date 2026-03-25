@@ -74,3 +74,12 @@ jobs:
 
       - name: Run Migrate
         run: npx drizzle-kit migrate
+
+  deploy:
+    runs-on: ubuntu-latest
+    environment: production
+    needs: migrate
+    steps:
+      - name: Deploy
+        run: |
+          curl "${{ secrets.RENDER_DEPLOY_HOOK_URL }}"
