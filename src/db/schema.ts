@@ -46,7 +46,5 @@ export const ticketsTable = pgTable("tickets", {
 
   status: text().notNull().default("pending"),
 
-  stripeSessionId: text(),
-
   createdAt: timestamp({ withTimezone: true }).notNull().defaultNow(),
 })
