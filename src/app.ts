@@ -9,16 +9,16 @@ import fs from "fs"
 import path from "path"
 
 import swaggerUi from "swagger-ui-express"
+import webhookRouter from "./routes/webhook.js"
 
 dotenv.config()
 
 export const app = express()
 
-app.use(express.json())
-
-app.use("/events", eventRouter)
-app.use("/users", userRouter)
-app.use("/events", ticketRouter)
+app.use("/events", express.json(), eventRouter)
+app.use("/users", express.json(), userRouter)
+app.use("/events", express.json(), ticketRouter)
+app.use("/", webhookRouter)
 
 const swaggerPath = path.join(process.cwd(), "docs", "swagger.json")
 

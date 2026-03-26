@@ -1,0 +1,27 @@
+import { Router } from "express"
+import express from "express"
+import { StripeWebhookController } from "../controllers/stripe/stripe-webhook.js"
+import { BuyTicketRepository } from "../repositories/ticket/buy-ticket.js"
+import { StripeWebhookUseCase } from "../use-cases/stripe/stripe-webhook.js"
+
+const webhookRouter = Router()
+
+webhookRouter.post(
+  "/stripe/webhook",
+  express.raw({ type: "application/json" }),
+
+  async (req, res) => {
+    const controller = new StripeWebhookController(
+      new StripeWebhookUseCase(new BuyTicketRepository())
+    )
+
+    const response = await controller.updateFromWebhook({
+      rawBody: req.body,
+      stripeSignature: req.headers["stripe-signature"] as string | undefined,
+    })
+
+    res.status(200).json(response)
+  }
+)
+
+export default webhookRouter
