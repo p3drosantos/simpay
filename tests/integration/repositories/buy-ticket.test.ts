@@ -37,6 +37,7 @@ describe("BuyTicketRepository", () => {
       buyerId: owner.id,
       quantity: 5,
       totalPriceInCents: 25000,
+      status: "pending",
     })
 
     expect(ticket).toBeDefined()
@@ -75,6 +76,7 @@ describe("BuyTicketRepository", () => {
       buyerId: owner.id,
       quantity: 2,
       totalPriceInCents: 200,
+      status: "pending",
     })
 
     await sut.buyTicket({
@@ -82,6 +84,7 @@ describe("BuyTicketRepository", () => {
       buyerId: owner.id,
       quantity: 3,
       totalPriceInCents: 300,
+      status: "pending",
     })
 
     const total = await sut.sumTicketsByEventId(event.id)

@@ -7,10 +7,23 @@ import {
 } from "../../../src/errors/users/ticket"
 import { EventNotFoundError } from "../../../src/errors/users/event"
 
+import { stripe } from "../../../src/lib/stripe"
+
+jest.mock("../../../src/lib/stripe", () => ({
+  stripe: {
+    checkout: {
+      sessions: {
+        create: jest.fn(),
+      },
+    },
+  },
+}))
+
 const makeSut = () => {
   const mockBuyTicketRepository = {
     buyTicket: jest.fn(),
     sumTicketsByEventId: jest.fn(),
+    updateTicket: jest.fn(),
   }
 
   const mockGetEventByIdRepository = {
@@ -58,6 +71,7 @@ describe("BuyTicketUseCase", () => {
       date: futureDate,
       maxTickets: 100,
       ticketPriceInCents: 100,
+      name: "event-name",
     }
 
     const userMock = {
@@ -79,18 +93,20 @@ describe("BuyTicketUseCase", () => {
       buyerId: params.buyerId,
       quantity: params.quantity,
       totalPriceInCents: expectedTotalPrice,
+      status: "pending",
+      createdAt: new Date(),
+    })
+    ;(stripe.checkout.sessions.create as jest.Mock).mockResolvedValue({
+      id: "session-id",
+      url: "checkout-url",
     })
 
     const result = await sut.buyTicket(params)
 
-    expect(mockBuyTicketRepository.buyTicket).toHaveBeenCalledWith({
-      eventId: params.eventId,
-      buyerId: params.buyerId,
-      quantity: params.quantity,
-      totalPriceInCents: expectedTotalPrice,
+    expect(result).toEqual({
+      checkoutUrl: "checkout-url",
+      ticketId: "ticket-id",
     })
-
-    expect(result.id).toBe("ticket-id")
   })
 
   it("should throw error if user not found", async () => {
