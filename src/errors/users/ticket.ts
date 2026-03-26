@@ -15,3 +15,10 @@ export class EventCapacityExceededError extends Error {
     super("Event capacity exceeded")
   }
 }
+
+export class MissingTicketIdError extends Error {
+  constructor() {
+    super("Missing ticketId in Stripe session metadata")
+    this.name = "MissingTicketIdError"
+  }
+}
