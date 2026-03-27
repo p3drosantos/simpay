@@ -5,7 +5,7 @@ import {
   StripeWebhookRequest,
 } from "./protocols.js"
 
-import Stripe from "stripe"
+import { stripe } from "../../lib/stripe.js"
 
 export class StripeWebhookController implements IStripeWebhookController {
   constructor(private readonly stripeWebhookUseCase: IStripeWebhookUseCase) {}
@@ -24,7 +24,7 @@ export class StripeWebhookController implements IStripeWebhookController {
         }
       }
 
-      const event = Stripe.webhooks.constructEvent(
+      const event = stripe.webhooks.constructEvent(
         rawBody,
         signature,
         process.env.STRIPE_WEBHOOK_SECRET!

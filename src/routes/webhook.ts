@@ -20,7 +20,7 @@ webhookRouter.post(
       stripeSignature: req.headers["stripe-signature"] as string | undefined,
     })
 
-    res.status(200).json(response)
+    res.status(response.statusCode).json(response.body)
   }
 )
 
