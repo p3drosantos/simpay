@@ -3,6 +3,7 @@ import { BuyTicketController } from "../../../src/controllers/tickets/buy-ticket
 import { UserNotFoundError } from "../../../src/errors/users/user-errors.js"
 import { EventNotFoundError } from "../../../src/errors/users/event.js"
 import {
+  EventAlreadyOccurredError,
   EventCapacityExceededError,
   OnlyCustomerCanBuyTicketError,
 } from "../../../src/errors/users/ticket.js"
@@ -37,14 +38,8 @@ describe("Buy Ticket Controller", () => {
     const { sut, mockUseCase } = makeSut()
 
     const makeResponse = {
-      id: "df4d5c8b7-4a4e-4c8b-9a4e-4c8b9a4e4c8b",
-      ownerId: "f4d5c8b7-4a4e-4c8b-9a4e-4c8b9a4e4c8b",
-      name: "any_name",
-      maxTickets: 10,
-      ticketPriceInCents: 1000,
-      longitude: 20,
-      latitude: 20,
-      date: new Date(),
+      checkoutUrl: "https://stripe.com/checkout/session/123",
+      ticketId: "ticket-123",
     }
 
     mockUseCase.buyTicket.mockResolvedValue(makeResponse)
@@ -53,6 +48,25 @@ describe("Buy Ticket Controller", () => {
 
     expect(response.statusCode).toBe(201)
     expect(response.body).toEqual(makeResponse)
+  })
+
+  it("should call use case with correct params", async () => {
+    const { sut, mockUseCase } = makeSut()
+
+    mockUseCase.buyTicket.mockResolvedValue({
+      checkoutUrl: "url",
+      ticketId: "id",
+    })
+
+    const request = makeRequest()
+
+    await sut.buyTicket(request)
+
+    expect(mockUseCase.buyTicket).toHaveBeenCalledWith({
+      quantity: 1,
+      eventId: eventid,
+      buyerId: request.userId,
+    })
   })
 
   it("should return 400 if missing body", async () => {
@@ -113,6 +127,19 @@ describe("Buy Ticket Controller", () => {
     expect(response.statusCode).toBe(403)
     expect(response.body).toEqual({
       error: "Only customers can buy tickets",
+    })
+  })
+
+  it("should return 400 if event already occurred", async () => {
+    const { sut, mockUseCase } = makeSut()
+
+    mockUseCase.buyTicket.mockRejectedValue(new EventAlreadyOccurredError())
+
+    const response = await sut.buyTicket(makeRequest())
+
+    expect(response.statusCode).toBe(400)
+    expect(response.body).toEqual({
+      error: "Event already occurred",
     })
   })
 
