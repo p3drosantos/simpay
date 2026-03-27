@@ -1,18 +1,13 @@
-import { StripeWebhookController } from "../../../src/controllers/stripe/stripe-webhook"
-import Stripe from "stripe"
-
-// 👇 mock do Stripe
-
-jest.mock("stripe", () => {
-  return {
-    __esModule: true,
-    default: {
-      webhooks: {
-        constructEvent: jest.fn(),
-      },
+jest.mock("../../../src/lib/stripe", () => ({
+  stripe: {
+    webhooks: {
+      constructEvent: jest.fn(),
     },
-  }
-})
+  },
+}))
+
+import { StripeWebhookController } from "../../../src/controllers/stripe/stripe-webhook"
+import { stripe } from "../../../src/lib/stripe"
 
 const makeSut = () => {
   const mockUseCase = {
@@ -43,7 +38,7 @@ describe("Stripe Webhook Controller", () => {
 
     const fakeEvent = { type: "checkout.session.completed" }
 
-    ;(Stripe.webhooks.constructEvent as jest.Mock).mockReturnValue(fakeEvent)
+    ;(stripe.webhooks.constructEvent as jest.Mock).mockReturnValue(fakeEvent)
 
     mockUseCase.updateFromWebhook.mockResolvedValue({
       ticketId: "ticket-123",
@@ -66,7 +61,7 @@ describe("Stripe Webhook Controller", () => {
 
     const fakeEvent = { type: "checkout.session.completed" }
 
-    ;(Stripe.webhooks.constructEvent as jest.Mock).mockReturnValue(fakeEvent)
+    ;(stripe.webhooks.constructEvent as jest.Mock).mockReturnValue(fakeEvent)
 
     mockUseCase.updateFromWebhook.mockRejectedValue(
       new Error("something went wrong")
@@ -85,7 +80,7 @@ describe("Stripe Webhook Controller", () => {
   it("should return 500 if Stripe constructEvent fails", async () => {
     const { sut } = makeSut()
 
-    ;(Stripe.webhooks.constructEvent as jest.Mock).mockImplementation(() => {
+    ;(stripe.webhooks.constructEvent as jest.Mock).mockImplementation(() => {
       throw new Error("invalid signature")
     })
 
