@@ -24,6 +24,10 @@ export class BuyTicketRepository implements IBuyTicketRepository {
       })
       .returning()
 
+    if (!ticket) {
+      throw new Error("Ticket not created")
+    }
+
     return {
       id: ticket.id,
       eventId: ticket.eventId,
@@ -54,6 +58,10 @@ export class BuyTicketRepository implements IBuyTicketRepository {
       .set(data)
       .where(eq(schema.ticketsTable.id, ticketId))
       .returning()
+
+    if (!ticket) {
+      throw new Error("Ticket not updated")
+    }
 
     return {
       id: ticket.id,
