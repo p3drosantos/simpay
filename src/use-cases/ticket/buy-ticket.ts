@@ -61,6 +61,10 @@ export class BuyTicketUseCase implements IBuyTicketUseCase {
       status: "pending",
     })
 
+    if (!ticket) {
+      throw new Error("Failed to buy ticket")
+    }
+
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
       line_items: [
@@ -80,10 +84,6 @@ export class BuyTicketUseCase implements IBuyTicketUseCase {
         ticketId: ticket.id,
       },
     })
-
-    if (!ticket) {
-      throw new Error("Failed to create checkout session")
-    }
 
     if (!session.url) {
       throw new Error("Failed to create checkout session")
