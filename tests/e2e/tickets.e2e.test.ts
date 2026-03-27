@@ -1,3 +1,16 @@
+jest.mock("../../src/lib/stripe", () => ({
+  stripe: {
+    checkout: {
+      sessions: {
+        create: jest.fn().mockResolvedValue({
+          id: "fake-session",
+          url: "http://fake-checkout-url",
+        }),
+      },
+    },
+  },
+}))
+
 import request from "supertest"
 import { app } from "../../src/app"
 import { db } from "../../src/db/client"
@@ -62,7 +75,7 @@ describe("Tickets E2E", () => {
     await createEvent(token)
 
     const res = await request(app)
-      .post("/tickets/f4de4e4e-4e4e-4e4e-4e4e-4e4e4e4e4e4e")
+      .post("/events/f4de4e4e-4e4e-4e4e-4e4e-4e4e4e4e4e4e/tickets")
       .set("Authorization", `Bearer ${token}`)
       .send({
         quantity: 1,
@@ -71,7 +84,7 @@ describe("Tickets E2E", () => {
     expect(res.status).toBe(404)
   })
 
-  it("should create ticket", async () => {
+  it("should create ticket and return checkout data", async () => {
     const token = await createUserAndLogin()
 
     const eventId = await createEvent(token)
@@ -84,6 +97,34 @@ describe("Tickets E2E", () => {
       })
 
     expect(res.status).toBe(201)
+
+    expect(res.body).toHaveProperty("checkoutUrl")
+    expect(res.body).toHaveProperty("ticketId")
+    expect(res.body.checkoutUrl).toBe("http://fake-checkout-url")
+  })
+
+  it("should persist ticket as pending", async () => {
+    const token = await createUserAndLogin()
+
+    const eventId = await createEvent(token)
+
+    const res = await request(app)
+      .post(`/events/${eventId}/tickets`)
+      .set("Authorization", `Bearer ${token}`)
+      .send({
+        quantity: 2,
+      })
+
+    const ticketId = res.body.ticketId
+
+    const [ticket] = await db
+      .select()
+      .from(schema.ticketsTable)
+      .where(eq(schema.ticketsTable.id, ticketId))
+
+    expect(ticket).toBeDefined()
+    expect(ticket.status).toBe("pending")
+    expect(ticket.quantity).toBe(2)
   })
 
   it("should return 400 if event capacity exceeded", async () => {
