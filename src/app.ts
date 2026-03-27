@@ -14,11 +14,11 @@ import webhookRouter from "./routes/webhook.js"
 dotenv.config()
 
 export const app = express()
+app.use("/", webhookRouter)
 
 app.use("/events", express.json(), eventRouter)
 app.use("/users", express.json(), userRouter)
 app.use("/events", express.json(), ticketRouter)
-app.use("/", webhookRouter)
 
 const swaggerPath = path.join(process.cwd(), "docs", "swagger.json")
 
