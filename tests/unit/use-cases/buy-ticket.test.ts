@@ -7,10 +7,23 @@ import {
 } from "../../../src/errors/users/ticket"
 import { EventNotFoundError } from "../../../src/errors/users/event"
 
+import { stripe } from "../../../src/lib/stripe"
+
+jest.mock("../../../src/lib/stripe", () => ({
+  stripe: {
+    checkout: {
+      sessions: {
+        create: jest.fn(),
+      },
+    },
+  },
+}))
+
 const makeSut = () => {
   const mockBuyTicketRepository = {
     buyTicket: jest.fn(),
     sumTicketsByEventId: jest.fn(),
+    updateTicket: jest.fn(),
   }
 
   const mockGetEventByIdRepository = {
@@ -58,6 +71,7 @@ describe("BuyTicketUseCase", () => {
       date: futureDate,
       maxTickets: 100,
       ticketPriceInCents: 100,
+      name: "event-name",
     }
 
     const userMock = {
@@ -79,18 +93,152 @@ describe("BuyTicketUseCase", () => {
       buyerId: params.buyerId,
       quantity: params.quantity,
       totalPriceInCents: expectedTotalPrice,
+      status: "pending",
+      createdAt: new Date(),
+    })
+    ;(stripe.checkout.sessions.create as jest.Mock).mockResolvedValue({
+      id: "session-id",
+      url: "checkout-url",
     })
 
     const result = await sut.buyTicket(params)
 
-    expect(mockBuyTicketRepository.buyTicket).toHaveBeenCalledWith({
-      eventId: params.eventId,
-      buyerId: params.buyerId,
-      quantity: params.quantity,
-      totalPriceInCents: expectedTotalPrice,
+    expect(result).toEqual({
+      checkoutUrl: "checkout-url",
+      ticketId: "ticket-id",
+    })
+  })
+
+  it("should call Stripe with correct data", async () => {
+    const {
+      sut,
+      mockBuyTicketRepository,
+      mockGetUserByIdRepository,
+      mockGetEventByIdRepository,
+    } = makeSut()
+
+    const futureDate = new Date()
+    futureDate.setDate(futureDate.getDate() + 1)
+
+    const eventMock = {
+      id: "event-id",
+      date: futureDate,
+      maxTickets: 100,
+      ticketPriceInCents: 100,
+      name: "event-name",
+    }
+
+    mockGetUserByIdRepository.getUserById.mockResolvedValue({
+      id: "buyer-id",
+      role: "customer",
     })
 
-    expect(result.id).toBe("ticket-id")
+    mockGetEventByIdRepository.getEventById.mockResolvedValue(eventMock)
+
+    mockBuyTicketRepository.sumTicketsByEventId.mockResolvedValue(0)
+
+    mockBuyTicketRepository.buyTicket.mockResolvedValue({
+      id: "ticket-id",
+    })
+    ;(stripe.checkout.sessions.create as jest.Mock).mockResolvedValue({
+      url: "checkout-url",
+    })
+
+    await sut.buyTicket(params)
+
+    expect(stripe.checkout.sessions.create).toHaveBeenCalledWith(
+      expect.objectContaining({
+        mode: "payment",
+        metadata: {
+          ticketId: "ticket-id",
+        },
+        line_items: [
+          expect.objectContaining({
+            quantity: params.quantity,
+          }),
+        ],
+      })
+    )
+  })
+
+  it("should send ticketId in metadata", async () => {
+    const {
+      sut,
+      mockBuyTicketRepository,
+      mockGetUserByIdRepository,
+      mockGetEventByIdRepository,
+    } = makeSut()
+
+    const futureDate = new Date()
+    futureDate.setDate(futureDate.getDate() + 1)
+
+    mockGetUserByIdRepository.getUserById.mockResolvedValue({
+      id: "buyer-id",
+      role: "customer",
+    })
+
+    mockGetEventByIdRepository.getEventById.mockResolvedValue({
+      id: "event-id",
+      date: futureDate,
+      maxTickets: 100,
+      ticketPriceInCents: 100,
+      name: "event-name",
+    })
+
+    mockBuyTicketRepository.sumTicketsByEventId.mockResolvedValue(0)
+
+    mockBuyTicketRepository.buyTicket.mockResolvedValue({
+      id: "ticket-id",
+    })
+    ;(stripe.checkout.sessions.create as jest.Mock).mockResolvedValue({
+      url: "checkout-url",
+    })
+
+    await sut.buyTicket(params)
+
+    expect(stripe.checkout.sessions.create).toHaveBeenCalledWith(
+      expect.objectContaining({
+        metadata: {
+          ticketId: "ticket-id",
+        },
+      })
+    )
+  })
+
+  it("should throw if Stripe fails", async () => {
+    const {
+      sut,
+      mockBuyTicketRepository,
+      mockGetUserByIdRepository,
+      mockGetEventByIdRepository,
+    } = makeSut()
+
+    const futureDate = new Date()
+    futureDate.setDate(futureDate.getDate() + 1)
+
+    mockGetUserByIdRepository.getUserById.mockResolvedValue({
+      id: "buyer-id",
+      role: "customer",
+    })
+
+    mockGetEventByIdRepository.getEventById.mockResolvedValue({
+      id: "event-id",
+      date: futureDate,
+      maxTickets: 100,
+      ticketPriceInCents: 100,
+      name: "event-name",
+    })
+
+    mockBuyTicketRepository.sumTicketsByEventId.mockResolvedValue(0)
+
+    mockBuyTicketRepository.buyTicket.mockResolvedValue({
+      id: "ticket-id",
+    })
+    ;(stripe.checkout.sessions.create as jest.Mock).mockRejectedValue(
+      new Error("stripe error")
+    )
+
+    await expect(sut.buyTicket(params)).rejects.toThrow("stripe error")
   })
 
   it("should throw error if user not found", async () => {

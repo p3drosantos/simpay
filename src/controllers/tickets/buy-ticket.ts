@@ -6,7 +6,6 @@ import {
   OnlyCustomerCanBuyTicketError,
 } from "../../errors/users/ticket.js"
 import { UserNotFoundError } from "../../errors/users/user-errors.js"
-import { Ticket } from "../../models/ticket.js"
 import {
   BuyTicketsInput,
   buyTicketsSchema,
@@ -19,7 +18,12 @@ export class BuyTicketController implements IBuyTicketController {
 
   async buyTicket(
     request: HttpRequest<BuyTicketsInput, { eventId: string }>
-  ): Promise<HttpResponse<Ticket | { error: ValidationError[] | string }>> {
+  ): Promise<
+    HttpResponse<
+      | { checkoutUrl: string; ticketId: string }
+      | { error: ValidationError[] | string }
+    >
+  > {
     try {
       if (!request.body) {
         return {

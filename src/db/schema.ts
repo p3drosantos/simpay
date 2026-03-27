@@ -44,5 +44,7 @@ export const ticketsTable = pgTable("tickets", {
 
   totalPriceInCents: integer("total_price_in_cents").notNull(),
 
+  status: text().notNull().default("pending"),
+
   createdAt: timestamp({ withTimezone: true }).notNull().defaultNow(),
 })

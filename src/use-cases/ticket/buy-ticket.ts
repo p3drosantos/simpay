@@ -11,7 +11,7 @@ import {
   OnlyCustomerCanBuyTicketError,
 } from "../../errors/users/ticket.js"
 import { UserNotFoundError } from "../../errors/users/user-errors.js"
-import { Ticket } from "../../models/ticket.js"
+import { stripe } from "../../lib/stripe.js"
 import { BuyTicketParams } from "../../types/ticket.js"
 
 export class BuyTicketUseCase implements IBuyTicketUseCase {
@@ -20,7 +20,9 @@ export class BuyTicketUseCase implements IBuyTicketUseCase {
     private readonly getEventByIdRepository: IGetEventByIdRepository,
     private readonly getUserByIdRepository: IGetUserByIdRepository
   ) {}
-  async buyTicket(params: BuyTicketParams): Promise<Ticket> {
+  async buyTicket(
+    params: BuyTicketParams
+  ): Promise<{ checkoutUrl: string; ticketId: string }> {
     const user = await this.getUserByIdRepository.getUserById(params.buyerId)
 
     if (!user) {
@@ -56,8 +58,40 @@ export class BuyTicketUseCase implements IBuyTicketUseCase {
       buyerId: params.buyerId,
       quantity: params.quantity,
       totalPriceInCents,
+      status: "pending",
     })
 
-    return ticket
+    if (!ticket) {
+      throw new Error("Failed to buy ticket")
+    }
+
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ["card"],
+      line_items: [
+        {
+          price_data: {
+            currency: "usd",
+            product_data: { name: event.name },
+            unit_amount: event.ticketPriceInCents,
+          },
+          quantity: params.quantity,
+        },
+      ],
+      mode: "payment",
+      success_url: "http://localhost:3000/success",
+      cancel_url: "http://localhost:3000/cancel",
+      metadata: {
+        ticketId: ticket.id,
+      },
+    })
+
+    if (!session.url) {
+      throw new Error("Failed to create checkout session")
+    }
+
+    return {
+      checkoutUrl: session.url,
+      ticketId: ticket.id,
+    }
   }
 }

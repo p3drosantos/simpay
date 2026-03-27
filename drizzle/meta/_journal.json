@@ -15,6 +15,20 @@
       "when": 1773765857201,
       "tag": "0001_add_tickets",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1774462933183,
+      "tag": "0002_add_stripe",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1774537234193,
+      "tag": "0003_remove_stripeSessionId",
+      "breakpoints": true
     }
   ]
 }
