@@ -83,8 +83,6 @@ describe("Stripe Webhook E2E", () => {
       .from(schema.ticketsTable)
       .where(eq(schema.ticketsTable.id, ticketId))
 
-    console.log("WEBHOOK RESPONSE:", webhookRes.body)
-
     expect(ticket.status).toBe("paid")
   })
 })

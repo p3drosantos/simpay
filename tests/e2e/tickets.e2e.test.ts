@@ -50,8 +50,6 @@ describe("Tickets E2E", () => {
         date,
       })
 
-    console.log("CREATE EVENT BODY:", res.body)
-
     return res.body.id
   }
 
