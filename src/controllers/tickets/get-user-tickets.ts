@@ -27,13 +27,6 @@ export class GetUserTicketsController implements IGetUserTicketsController {
         body: tickets,
       }
     } catch (error) {
-      if (error instanceof Error) {
-        return {
-          statusCode: 500,
-          body: { error: "Internal server error" },
-        }
-      }
-
       if (error instanceof UnauthorizedError) {
         return {
           statusCode: 401,
@@ -43,7 +36,7 @@ export class GetUserTicketsController implements IGetUserTicketsController {
 
       return {
         statusCode: 500,
-        body: { error: "Unknown error" },
+        body: { error: "Internal server error" },
       }
     }
   }
