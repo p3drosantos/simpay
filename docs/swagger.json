@@ -80,6 +80,35 @@
         }
       }
     },
+    "/users/me/tickets": {
+      "get": {
+        "summary": "List authenticated user's tickets",
+        "description": "Returns all tickets purchased by the authenticated user, including event details.",
+        "tags": ["User"],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tickets found",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/UserTicketResponse"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
     "/events": {
       "post": {
         "summary": "Create event",
@@ -570,6 +599,53 @@
         "quantity": {
           "type": "integer",
           "example": 2
+        }
+      }
+    },
+    "EventSummary": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "example": "e299b4d5-c6e9-4a0a-a133-3a86f9daa3d5"
+        },
+        "name": {
+          "type": "string",
+          "example": "My Event"
+        },
+        "date": {
+          "type": "string",
+          "format": "date-time",
+          "example": "2027-01-01T00:00:00.000Z"
+        }
+      }
+    },
+    "UserTicketResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "example": "e299b4d5-c6e9-4a0a-a133-3a86f9daa3d5"
+        },
+        "quantity": {
+          "type": "integer",
+          "example": 2
+        },
+        "totalPriceInCents": {
+          "type": "integer",
+          "example": 200
+        },
+        "status": {
+          "type": "string",
+          "example": "paid"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "example": "2027-01-01T00:00:00.000Z"
+        },
+        "event": {
+          "$ref": "#/definitions/EventSummary"
         }
       }
     }

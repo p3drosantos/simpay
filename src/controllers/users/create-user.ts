@@ -41,7 +41,6 @@ export class CreateUserController implements ICreateUserController {
         body: userWithoutPassword,
       }
     } catch (error) {
-      console.log(error)
       if (error instanceof ZodError) {
         return {
           statusCode: 400,

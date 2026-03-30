@@ -29,3 +29,45 @@ export interface IBuyTicketController {
     >
   >
 }
+
+export type TicketWithEventInfo = {
+  ticket: {
+    id: string
+    quantity: number
+    totalPriceInCents: number
+    status: string
+    createdAt: Date
+  }
+  event: {
+    id: string
+    name: string
+    date: Date
+  } | null
+}
+
+export type UserTicketResponse = {
+  id: string
+  quantity: number
+  totalPriceInCents: number
+  status: string
+  createdAt: Date
+  event: {
+    id: string
+    name: string
+    date: Date
+  } | null
+}
+
+export interface IGetUserTicketsRepository {
+  getUserTickets(userId: string): Promise<TicketWithEventInfo[]>
+}
+
+export interface IGetUserTicketsUseCase {
+  getUserTickets(userId: string): Promise<UserTicketResponse[]>
+}
+
+export interface IGetUserTicketsController {
+  getUserTickets(
+    request: HttpRequest<unknown, unknown, unknown, unknown>
+  ): Promise<HttpResponse<UserTicketResponse[] | { error: string }>>
+}
