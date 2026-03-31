@@ -18,7 +18,10 @@ const sqs = new SQSClient({
   },
 })
 
+console.log("Worker iniciado")
+
 async function pollMessages() {
+  console.log("🔍 Buscando mensagens...")
   const command = new ReceiveMessageCommand({
     QueueUrl: process.env.SQS_QUEUE_URL!,
     MaxNumberOfMessages: 1,
@@ -27,7 +30,10 @@ async function pollMessages() {
 
   const response = await sqs.send(command)
 
-  if (!response.Messages) return
+  if (!response.Messages) {
+    console.log("📭 Nenhuma mensagem")
+    return
+  }
 
   for (const message of response.Messages) {
     await handleMessage(message.Body!)
