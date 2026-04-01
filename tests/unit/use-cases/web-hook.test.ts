@@ -12,14 +12,23 @@ const makeSut = () => {
     sumTicketsByEventId: jest.fn(),
   } satisfies IBuyTicketRepository
 
-  const sut = new StripeWebhookUseCase(mockRepository)
+  const mockQueue = {
+    sendMessage: jest.fn(),
+  }
 
-  return { sut, mockRepository }
+  const sut = new StripeWebhookUseCase(mockRepository, mockQueue)
+
+  return { sut, mockRepository, mockQueue }
 }
 
 describe("StripeWebhookUseCase", () => {
   it("should update ticket when event is valid", async () => {
-    const { sut, mockRepository } = makeSut()
+    const { sut, mockRepository, mockQueue } = makeSut()
+    mockRepository.updateTicket.mockResolvedValue({
+      id: "ticket-123",
+      eventId: "event-123",
+      buyerId: "user-123",
+    })
 
     const event = {
       type: "checkout.session.completed",
@@ -40,6 +49,13 @@ describe("StripeWebhookUseCase", () => {
 
     expect(result).toEqual({
       ticketId: "ticket-123",
+    })
+
+    expect(mockQueue.sendMessage).toHaveBeenCalledWith({
+      type: "PAYMENT_CONFIRMED",
+      ticketId: "ticket-123",
+      eventId: expect.any(String),
+      buyerId: expect.any(String),
     })
   })
 
@@ -95,5 +111,35 @@ describe("StripeWebhookUseCase", () => {
     const promise = sut.updateFromWebhook(event)
 
     await expect(promise).rejects.toThrow("db error")
+  })
+
+  it("should send message to queue when ticket is paid", async () => {
+    const { sut, mockRepository, mockQueue } = makeSut()
+
+    mockRepository.updateTicket.mockResolvedValue({
+      id: "ticket-123",
+      eventId: "event-123",
+      buyerId: "user-123",
+    })
+
+    const event = {
+      type: "checkout.session.completed",
+      data: {
+        object: {
+          metadata: {
+            ticketId: "ticket-123",
+          },
+        },
+      },
+    } as unknown as Stripe.Event
+
+    await sut.updateFromWebhook(event)
+
+    expect(mockQueue.sendMessage).toHaveBeenCalledWith({
+      type: "PAYMENT_CONFIRMED",
+      ticketId: "ticket-123",
+      eventId: "event-123",
+      buyerId: "user-123",
+    })
   })
 })
