@@ -27,13 +27,14 @@ export class StripeWebhookUseCase implements IStripeWebhookUseCase {
     const ticket = await this.buyTicketRepository.updateTicket(ticketId, {
       status: "paid",
     })
-
+    console.log("vou enviar a mensagem para a fila")
     await this.queue.sendMessage({
       type: "PAYMENT_CONFIRMED",
       ticketId: ticket.id,
       eventId: ticket.eventId,
       buyerId: ticket.buyerId,
     })
+    console.log("mensagem enviada para a fila")
 
     return { ticketId }
   }

@@ -36,6 +36,7 @@ async function pollMessages() {
   }
 
   for (const message of response.Messages) {
+    console.log("📩 MENSAGEM RECEBIDA:", message.Body)
     await handleMessage(message.Body!)
 
     if (message.ReceiptHandle) {
