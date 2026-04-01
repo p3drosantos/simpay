@@ -12,11 +12,15 @@ export async function handleMessage(rawMessage: string) {
     const user = await getUserByIdRepository.getUserById(data.buyerId)
 
     if (!user) {
-      console.log("✅ email enviado")
+      console.log("❌ Usuário não encontrado")
       return
     }
-    console.log("📧 tentando enviar email para:", user.email)
-    await sendEmail(user.email)
-    console.log("✅ email enviado")
+    try {
+      console.log("vou chamar o sendEmail")
+      await sendEmail(user.email)
+      console.log("✅ Email enviado com sucesso")
+    } catch (error) {
+      console.error("❌ Erro ao enviar email:", error)
+    }
   }
 }
