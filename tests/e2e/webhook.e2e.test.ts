@@ -13,6 +13,18 @@ jest.mock("../../src/lib/stripe", () => ({
     },
   },
 }))
+
+jest.mock("@aws-sdk/client-sqs", () => {
+  return {
+    SQSClient: jest.fn().mockImplementation(() => ({
+      send: jest.fn().mockResolvedValue({}),
+    })),
+    SendMessageCommand: jest.fn(),
+    ReceiveMessageCommand: jest.fn(),
+    DeleteMessageCommand: jest.fn(),
+  }
+})
+
 import request from "supertest"
 import { app } from "../../src/app"
 import { db } from "../../src/db/client"
